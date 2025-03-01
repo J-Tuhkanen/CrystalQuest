@@ -1,6 +1,5 @@
 package tile;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -15,7 +14,7 @@ import main.GamePanel;
 public class TileManager {
 
 	GamePanel gamePanel;
-	ArrayList<Tile> tiles;
+	final ArrayList<Tile> worldMap = new ArrayList<Tile>();
 	
 	public TileManager(GamePanel gamePanel, int tilesCapacity) {
 		
@@ -26,7 +25,6 @@ public class TileManager {
 	
 	public void loadMap(String mapFilePath) {
 		try {
-			ArrayList<Tile> stackTiles = new ArrayList<Tile>();
 			int yOffSet = 0;
 			int xOffSet = 0;
 
@@ -42,7 +40,7 @@ public class TileManager {
 					tile.y = yOffSet;
 					tile.image = ImageIO.read(getClass().getResourceAsStream(String.format("/tiles/%s.png", tileId)));
 					
-					stackTiles.add(tile);
+					worldMap.add(tile);
 					xOffSet += this.gamePanel.tileSize;
 				}
 				
@@ -53,8 +51,6 @@ public class TileManager {
 			
 			reader.close();
 			stream.close();
-			
-			tiles = stackTiles;
 		}
 		catch(Exception e) {
 			e.printStackTrace();
@@ -65,7 +61,7 @@ public class TileManager {
 		
 		int tileCount = 0;
 		Player player = gamePanel.player;
-		for(Tile tile : this.tiles) {	
+		for(Tile tile : this.worldMap) {	
 			
 			boolean shouldNotRender = 
 					tile.x < player.worldX - gamePanel.screenWidth / 2 || 
