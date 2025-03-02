@@ -24,13 +24,13 @@ public class GamePanel extends JPanel implements Runnable {
 	public final int screenWidth = tileSize * maxScreenColums;
 	public final int screenHeight = tileSize * maxScreenRows;
 	
-	int fps = 60;
+	int fps = 90;
 	
 	private final KeyHandler keyHandler = new KeyHandler();
 	private final Thread gameThread;
-	
+	public final CollisionChecker collisiongChecker;
 	private final List<IUpdateable> updateables = new ArrayList<IUpdateable>();
-	private final TileManager tileManager = new TileManager(this, 10);
+	public final TileManager tileManager = new TileManager(this, 10);
 	public Player player = new Player(this, keyHandler);
 	
 	public GamePanel() {
@@ -41,7 +41,7 @@ public class GamePanel extends JPanel implements Runnable {
 		addKeyListener(keyHandler);
 		setFocusable(true);
 		gameThread = new Thread(this);
-		
+		this.collisiongChecker = new CollisionChecker(this);
 		this.updateables.add(player);
 	}	
 	

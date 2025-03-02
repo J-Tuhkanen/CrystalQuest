@@ -1,6 +1,7 @@
 package entity;
 
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 import main.Direction;
@@ -13,23 +14,29 @@ public class Player extends Entity implements IUpdateable {
 	KeyHandler keyH;
 	int tileSize = 0;
 	int spriteCounter = 0;
-	int cameraX, cameraY;
+	public int cameraX, cameraY;
 	
 	public Player(GamePanel gp, KeyHandler keyH) {
 		super(gp, "/player/boy");
 		this.gp = gp;
 		this.keyH = keyH;
 		this.tileSize = gp.getTileSize();
+		this.collision = new Rectangle();
 		
-		cameraX = gp.screenWidth/2;
-		cameraY= gp.screenHeight/2;
+		this.collision.height = 10;
+		this.collision.width = gp.tileSize;
+		this.collision.x = 0;
+		this.collision.y = gp.tileSize - this.collision.height;
+		
+		this.cameraX = gp.screenWidth/2;
+		this.cameraY = gp.screenHeight/2;
 				
 		setDefaultValues();
 	}
 	
 	public void setDefaultValues() {
-		worldX = 200;
-		worldY = 200;
+		worldX = 100;
+		worldY = 100;
 		speed = 4;
 	}
 	
@@ -43,20 +50,36 @@ public class Player extends Entity implements IUpdateable {
 		}
 		
 		if(keyH.upPressed) {
-			direction = Direction.Up;
-			worldY -= speed;
+			direction = Direction.Up;			
 		}
 		if(keyH.downPressed) {
-			direction = Direction.Down;
-			worldY += speed;
+			direction = Direction.Down;			
 		}
 		if(keyH.leftPressed) {
-			direction = Direction.Left;
-			worldX -= speed;
+			direction = Direction.Left;			
 		}
 		if(keyH.rightPressed) {
-			direction = Direction.Right;
-			worldX += speed;
+			direction = Direction.Right;			
+		}
+		
+		// Check collision
+		collisionOn = false;
+		this.gp.collisiongChecker.checkTile(this);
+		
+		if (collisionOn == false) {
+			if (this.direction == Direction.Down) {
+			    worldY += speed;
+			}
+			if (this.direction == Direction.Left) {
+			    worldX -= speed;
+			}
+			if (this.direction == Direction.Right) {
+			    worldX += speed;
+			}
+			if (this.direction == Direction.Up) {
+			    worldY -= speed;
+			}
+
 		}
 		
 		this.spriteCounter++;
