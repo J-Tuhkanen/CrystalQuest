@@ -1,5 +1,6 @@
 package entity;
 
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -16,6 +17,9 @@ public class Entity {
 	public final int spriteCount = 2;
 	public final String imagePrefix;
 	public Direction direction = Direction.Down;
+	
+	public Rectangle collision;
+	public boolean collisionOn = false;
 	
 	public BufferedImage[] up = new BufferedImage[this.spriteCount];
 	public BufferedImage[] left = new BufferedImage[this.spriteCount];
