@@ -12,12 +12,12 @@ public class Main {
 		window.setTitle("CystalQuest");
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.add(gamePanel);
-		window.add(gamePanel);
-		gamePanel.startGameThread();
 		window.pack();
 		window.setLocationRelativeTo(null);
-		window.setResizable(true);
+		window.setResizable(false);
 		window.setVisible(true);
-	}
 
+		gamePanel.setupGame();
+		gamePanel.startGameThread();
+	}
 }

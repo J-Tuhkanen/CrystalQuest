@@ -20,7 +20,7 @@ public class Player extends Entity implements IUpdateable {
 		super(gp, "/player/boy");
 		this.gp = gp;
 		this.keyH = keyH;
-		this.tileSize = gp.getTileSize();
+		this.tileSize = gp.tileSize;
 		this.collision = new Rectangle();
 		
 		this.collision.height = 10;
@@ -117,6 +117,6 @@ public class Player extends Entity implements IUpdateable {
 				break;
 		}
 		
-		g.drawImage(image, cameraX, cameraY, gp.getTileSize(), gp.getTileSize(), null);
+		g.drawImage(image, cameraX, cameraY, gp.tileSize, gp.tileSize, null);
 	}
 }

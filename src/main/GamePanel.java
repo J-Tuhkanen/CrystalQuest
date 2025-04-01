@@ -11,11 +11,18 @@ import javax.swing.JPanel;
 
 import abstraction.IUpdateable;
 import entity.Player;
+import object.GameObject;
+import object.Key;
 import tile.TileManager;
 
 public class GamePanel extends JPanel implements Runnable {
 
 	private static final long serialVersionUID = 3169133952889093310L;
+	private final int _fps = 60;
+	private final KeyHandler _keyHandler = new KeyHandler();
+	private final Thread _gameThread;
+	private final List<IUpdateable> _updateables = new ArrayList<IUpdateable>();
+	private final GameObjectManager _gameObjectManager = new GameObjectManager(this);
 
 	// Screen settings
 	public final int tileSize = 64;
@@ -23,42 +30,41 @@ public class GamePanel extends JPanel implements Runnable {
 	public final int maxScreenRows = 12;
 	public final int screenWidth = tileSize * maxScreenColums;
 	public final int screenHeight = tileSize * maxScreenRows;
-	
-	int fps = 90;
-	
-	private final KeyHandler keyHandler = new KeyHandler();
-	private final Thread gameThread;
 	public final CollisionChecker collisiongChecker;
-	private final List<IUpdateable> updateables = new ArrayList<IUpdateable>();
 	public final TileManager tileManager = new TileManager(this, 10);
-	public Player player = new Player(this, keyHandler);
+	public final Player player = new Player(this, _keyHandler);
+	public final List<GameObject> objects = new ArrayList<GameObject>();	
 	
 	public GamePanel() {
-		
+				
 		setPreferredSize(new Dimension(screenWidth, screenHeight));
 		setBackground(Color.black);
 		setDoubleBuffered(true);
-		addKeyListener(keyHandler);
+		addKeyListener(_keyHandler);
 		setFocusable(true);
-		gameThread = new Thread(this);
+		_gameThread = new Thread(this);
 		this.collisiongChecker = new CollisionChecker(this);
-		this.updateables.add(player);
+		this._updateables.add(player);
 	}	
+
+	public void setupGame() {
+		_gameObjectManager.setObject();
+	}
 	
 	public void startGameThread() {
-		gameThread.start();
+		_gameThread.start();
 	}
 
 	@Override
 	public void run() {
 		
-		double drawInterval = 1000000000 / fps;
+		double drawInterval = 1000000000 / _fps;
 		double delta = 0;
 		long lastTime = System.nanoTime();
 		long currentTime;
 		long timer = 0;
 
-		while (gameThread != null) {
+		while (_gameThread != null) {
 		    currentTime = System.nanoTime();
 		    delta += (currentTime - lastTime) / drawInterval;
 		    timer += (currentTime - lastTime);
@@ -78,7 +84,7 @@ public class GamePanel extends JPanel implements Runnable {
 	
 	public void update() {
 		
-		for(IUpdateable u : this.updateables) {			
+		for(IUpdateable u : this._updateables) {			
 			u.update();
 		}
 	}
@@ -87,12 +93,12 @@ public class GamePanel extends JPanel implements Runnable {
 		super.paintComponent(graphics);
 		
 		Graphics2D g = (Graphics2D)graphics;
+		
 		tileManager.draw(g);
+		for(GameObject o : this.objects) {
+			o.draw(g, this);
+		}		
 		player.draw(g);
 		g.dispose();
-	}
-	
-	public int getTileSize() {
-		return this.tileSize;
 	}
 }
