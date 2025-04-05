@@ -16,7 +16,7 @@ public class TileManager {
 	GamePanel gamePanel;
 	public final ArrayList<ArrayList<Tile>> worldMap = new ArrayList<ArrayList<Tile>>();
 	private final String[] collisionTileIds = new String[] {
-		"016", 
+		"016", "032"
 	};
 	
 	public TileManager(GamePanel gamePanel, int tilesCapacity) {
@@ -71,10 +71,10 @@ public class TileManager {
 			for(Tile tile : list) {	
 				
 				boolean shouldNotRender = 
-						tile.x < player.worldX - player.cameraX - gamePanel.tileSize || 
-						tile.y < player.worldY - player.cameraY - gamePanel.tileSize || 
-						tile.x > player.worldX + player.cameraX || 
-						tile.y > player.worldY + player.cameraY;
+					tile.x < player.worldX - player.cameraX - gamePanel.tileSize || 
+					tile.y < player.worldY - player.cameraY - gamePanel.tileSize || 
+					tile.x > player.worldX + player.cameraX || 
+					tile.y > player.worldY + player.cameraY;
 				
 				if(shouldNotRender) {
 					continue;
@@ -87,8 +87,6 @@ public class TileManager {
 				g.drawImage(tile.image, xOffSet, yOffSet, this.gamePanel.tileSize, this.gamePanel.tileSize, null);
 			}		
 		}
-		
-		System.out.println(tileCount);
 	}
 	
 	private boolean hasCollision(String id) {

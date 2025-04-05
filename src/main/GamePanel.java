@@ -12,7 +12,6 @@ import javax.swing.JPanel;
 import abstraction.IUpdateable;
 import entity.Player;
 import object.GameObject;
-import object.Key;
 import tile.TileManager;
 
 public class GamePanel extends JPanel implements Runnable {
@@ -21,7 +20,7 @@ public class GamePanel extends JPanel implements Runnable {
 	private final int _fps = 60;
 	private final KeyHandler _keyHandler = new KeyHandler();
 	private final Thread _gameThread;
-	private final List<IUpdateable> _updateables = new ArrayList<IUpdateable>();
+	private final ArrayList<IUpdateable> _updateables = new ArrayList<IUpdateable>();
 	private final GameObjectManager _gameObjectManager = new GameObjectManager(this);
 
 	// Screen settings
@@ -33,7 +32,7 @@ public class GamePanel extends JPanel implements Runnable {
 	public final CollisionChecker collisiongChecker;
 	public final TileManager tileManager = new TileManager(this, 10);
 	public final Player player = new Player(this, _keyHandler);
-	public final List<GameObject> objects = new ArrayList<GameObject>();	
+	public final ArrayList<GameObject> objects = new ArrayList<GameObject>();	
 	
 	public GamePanel() {
 				

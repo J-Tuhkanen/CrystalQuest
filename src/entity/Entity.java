@@ -12,23 +12,34 @@ import main.GamePanel;
 public class Entity {
 
 	protected GamePanel gp;
+	protected int spriteCount = 2;
+	protected int spriteIndex = 0;
+
 	public int worldX, worldY, speed;
-	public int spriteIndex = 0;
-	public final int spriteCount = 2;
 	public final String imagePrefix;
 	public Direction direction = Direction.Down;
 	
 	public Rectangle collision;
 	public boolean collisionOn = false;
 	
+	public Rectangle solidArea;
+	public int solidAreaDefaultX, solidAreaDefaultY;
+	
 	public BufferedImage[] up = new BufferedImage[this.spriteCount];
 	public BufferedImage[] left = new BufferedImage[this.spriteCount];
 	public BufferedImage[] right = new BufferedImage[this.spriteCount];
-	public BufferedImage[] down = new BufferedImage[this.spriteCount];
+	public BufferedImage[] down = new BufferedImage[this.spriteCount];	
 	
 	public Entity(GamePanel gp, String imagePrefix) {
 		this.gp = gp;
 		this.imagePrefix = imagePrefix;
+		loadImages();
+	}
+	
+	public Entity(GamePanel gp, String imagePrefix, int spriteCount) {
+		this.gp = gp;
+		this.imagePrefix = imagePrefix;
+		this.spriteCount = spriteCount;
 		loadImages();
 	}
 	

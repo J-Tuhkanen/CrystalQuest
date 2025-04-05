@@ -7,6 +7,7 @@ import java.awt.image.BufferedImage;
 import main.Direction;
 import main.GamePanel;
 import main.KeyHandler;
+import object.GameObject;
 import abstraction.IUpdateable;
 
 public class Player extends Entity implements IUpdateable {
@@ -30,13 +31,22 @@ public class Player extends Entity implements IUpdateable {
 		
 		this.cameraX = gp.screenWidth/2;
 		this.cameraY = gp.screenHeight/2;
-				
+		
+		this.solidArea = new Rectangle();
+		this.solidArea.x = 8;
+		this.solidArea.y = 16;
+		this.solidArea.width = 32;
+		this.solidArea.height = 32;
+		
+		this.solidAreaDefaultX = this.solidArea.x;
+		this.solidAreaDefaultY = this.solidArea.y;
+		
 		setDefaultValues();
 	}
 	
 	public void setDefaultValues() {
-		worldX = 100;
-		worldY = 100;
+		worldX = gp.tileSize * 5;
+		worldY = gp.tileSize * 16;
 		speed = 4;
 	}
 	
@@ -66,6 +76,12 @@ public class Player extends Entity implements IUpdateable {
 		collisionOn = false;
 		this.gp.collisiongChecker.checkTile(this);
 		
+		// Check object collision
+		this.gp.collisiongChecker.checkObject(this, true);
+		
+		//if(objectIndex >= 0) {
+			//pickUpObject(objectIndex);
+		
 		if (collisionOn == false) {
 			if (this.direction == Direction.Down) {
 			    worldY += speed;
@@ -94,6 +110,12 @@ public class Player extends Entity implements IUpdateable {
 			}
 			this.spriteCounter = 0;
 		}
+	}
+	
+	public void pickUpObject(int objIndex) {
+		
+		String itemName = gp.objects.get(objIndex).name;
+		System.out.println("pick up " + itemName);
 	}
 	
 	public void draw(Graphics2D g) {

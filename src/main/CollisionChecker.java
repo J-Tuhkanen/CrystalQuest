@@ -1,9 +1,9 @@
 package main;
 
 import entity.Entity;
+import entity.Player;
+import object.GameObject;
 import tile.Tile;
-
-
 
 public class CollisionChecker {
 
@@ -95,5 +95,51 @@ public class CollisionChecker {
 	            entity.collisionOn = true;
 	        }
 	    }	
+	}
+	
+	public void checkObject(Entity entity, boolean player) {
+						
+		for (int i = 0; i < gp.objects.size(); i++) {
+			
+			GameObject gameObject = gp.objects.get(i);
+			
+			entity.solidArea.x = entity.worldX + entity.solidArea.x;
+			entity.solidArea.y = entity.worldY + entity.solidArea.y;
+						
+			gameObject.solidArea.x = gameObject.worldX + gameObject.solidArea.x;
+			gameObject.solidArea.y = gameObject.worldY + gameObject.solidArea.y;
+			
+			switch(entity.direction) {
+				case Up:
+					entity.solidArea.y -= entity.speed;
+					break;
+				case Down:
+					entity.solidArea.y += entity.speed;	
+					break;
+				case Left:
+					entity.solidArea.x -= entity.speed;
+					break;
+				case Right:
+					entity.solidArea.x += entity.speed;
+					break;
+				
+			}
+			if(entity.solidArea.intersects(gameObject.solidArea)) {
+				System.out.println("Collision");
+				
+				if(gameObject.collision) {
+					
+					entity.collisionOn = true;
+				}
+				else if(player) {
+					((Player)entity).pickUpObject(i);
+				}
+			}
+			
+			entity.solidArea.x = entity.solidAreaDefaultX;
+			entity.solidArea.y = entity.solidAreaDefaultY;
+			gameObject.solidArea.x = gameObject.solidAreaDefaultX;
+			gameObject.solidArea.y = gameObject.solidAreaDefaultY;
+		}
 	}
 }
