@@ -1,8 +1,9 @@
 package main;
 
+import java.awt.Rectangle;
+
 import entity.Entity;
 import entity.Player;
-import object.GameObject;
 import tile.Tile;
 
 public class CollisionChecker {
@@ -97,34 +98,38 @@ public class CollisionChecker {
 	    }	
 	}
 	
-	public void checkObject(Entity entity, boolean player) {
+	public void checkObjectCollision(Entity entity, boolean player) {
 						
-		for (int i = 0; i < gp.objects.size(); i++) {
+		// Run the check in reverse so we can have a clean loop with a delete within the collection.
+		for (int i = gp.objects.size() - 1; i > -1 ; i--) {
 			
-			GameObject gameObject = gp.objects.get(i);
+			var gameObject = gp.objects.get(i);			
+			var entitySolidArea = new Rectangle(entity.hitBox);
+			var gameObjectSolidArea = new Rectangle(gameObject.solidArea);
 			
-			entity.solidArea.x = entity.worldX + entity.solidArea.x;
-			entity.solidArea.y = entity.worldY + entity.solidArea.y;
+			entitySolidArea.x = entity.worldX + entity.hitBox.x;
+			entitySolidArea.y = entity.worldY + entity.hitBox.y;
 						
-			gameObject.solidArea.x = gameObject.worldX + gameObject.solidArea.x;
-			gameObject.solidArea.y = gameObject.worldY + gameObject.solidArea.y;
+			gameObjectSolidArea.x = gameObject.worldX + gameObject.solidArea.x;
+			gameObjectSolidArea.y = gameObject.worldY + gameObject.solidArea.y;
 			
 			switch(entity.direction) {
 				case Up:
-					entity.solidArea.y -= entity.speed;
+					entitySolidArea.y -= entity.speed;
 					break;
 				case Down:
-					entity.solidArea.y += entity.speed;	
+					entitySolidArea.y += entity.speed;	
 					break;
 				case Left:
-					entity.solidArea.x -= entity.speed;
+					entitySolidArea.x -= entity.speed;
 					break;
 				case Right:
-					entity.solidArea.x += entity.speed;
+					entitySolidArea.x += entity.speed;
 					break;
 				
 			}
-			if(entity.solidArea.intersects(gameObject.solidArea)) {
+			
+			if(entitySolidArea.intersects(gameObjectSolidArea)) {
 				System.out.println("Collision");
 				
 				if(gameObject.collision) {
@@ -132,14 +137,9 @@ public class CollisionChecker {
 					entity.collisionOn = true;
 				}
 				else if(player) {
-					((Player)entity).pickUpObject(i);
+					((Player)entity).pickUpObject(gameObject);
 				}
 			}
-			
-			entity.solidArea.x = entity.solidAreaDefaultX;
-			entity.solidArea.y = entity.solidAreaDefaultY;
-			gameObject.solidArea.x = gameObject.solidAreaDefaultX;
-			gameObject.solidArea.y = gameObject.solidAreaDefaultY;
 		}
 	}
 }

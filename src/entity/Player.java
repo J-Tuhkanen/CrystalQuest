@@ -13,6 +13,8 @@ import abstraction.IUpdateable;
 public class Player extends Entity implements IUpdateable {
 	
 	KeyHandler keyH;
+	
+	GameObject inventory[] = new GameObject[8];
 	int tileSize = 0;
 	int spriteCounter = 0;
 	public int cameraX, cameraY;
@@ -32,14 +34,14 @@ public class Player extends Entity implements IUpdateable {
 		this.cameraX = gp.screenWidth/2;
 		this.cameraY = gp.screenHeight/2;
 		
-		this.solidArea = new Rectangle();
-		this.solidArea.x = 8;
-		this.solidArea.y = 16;
-		this.solidArea.width = 32;
-		this.solidArea.height = 32;
+		this.hitBox = new Rectangle();
+		this.hitBox.x = 8;
+		this.hitBox.y = 16;
+		this.hitBox.width = 32;
+		this.hitBox.height = 32;
 		
-		this.solidAreaDefaultX = this.solidArea.x;
-		this.solidAreaDefaultY = this.solidArea.y;
+		this.solidAreaDefaultX = this.hitBox.x;
+		this.solidAreaDefaultY = this.hitBox.y;
 		
 		setDefaultValues();
 	}
@@ -77,10 +79,7 @@ public class Player extends Entity implements IUpdateable {
 		this.gp.collisiongChecker.checkTile(this);
 		
 		// Check object collision
-		this.gp.collisiongChecker.checkObject(this, true);
-		
-		//if(objectIndex >= 0) {
-			//pickUpObject(objectIndex);
+		this.gp.collisiongChecker.checkObjectCollision(this, true);
 		
 		if (collisionOn == false) {
 			if (this.direction == Direction.Down) {
@@ -112,10 +111,20 @@ public class Player extends Entity implements IUpdateable {
 		}
 	}
 	
-	public void pickUpObject(int objIndex) {
+	public void pickUpObject(GameObject obj) {
 		
-		String itemName = gp.objects.get(objIndex).name;
-		System.out.println("pick up " + itemName);
+		for(int i = 0; i < this.inventory.length; i++) {
+						
+			// Find empty inventory slot
+			if (this.inventory[i] == null) {
+				
+				this.inventory[i] = obj;
+				System.out.println("pick up " + obj.name);
+				gp.objects.remove(obj);
+				return;
+			}
+		}
+		System.out.println("Inventory is full.");
 	}
 	
 	public void draw(Graphics2D g) {
