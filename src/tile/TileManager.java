@@ -65,7 +65,6 @@ public class TileManager {
 		
 	public void draw(Graphics2D g) {		 		
 		
-		int tileCount = 0;
 		Player player = gamePanel.player;
 		for(var list : this.worldMap) {			
 			for(Tile tile : list) {	
@@ -80,7 +79,6 @@ public class TileManager {
 					continue;
 				}
 				
-				tileCount++;
 				int xOffSet = tile.x - player.worldX + player.cameraX;
 				int yOffSet = tile.y - player.worldY + player.cameraY;
 				

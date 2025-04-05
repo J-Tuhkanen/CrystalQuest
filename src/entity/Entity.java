@@ -22,7 +22,7 @@ public class Entity {
 	public Rectangle collision;
 	public boolean collisionOn = false;
 	
-	public Rectangle solidArea;
+	public Rectangle hitBox;
 	public int solidAreaDefaultX, solidAreaDefaultY;
 	
 	public BufferedImage[] up = new BufferedImage[this.spriteCount];
