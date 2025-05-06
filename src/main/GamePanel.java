@@ -5,6 +5,8 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
+import java.util.Dictionary;
+import java.util.Hashtable;
 
 import javax.swing.JPanel;
 
@@ -30,6 +32,12 @@ public class GamePanel extends JPanel implements Runnable {
 	public final int screenHeight = tileSize * maxScreenRows;
 	public final CollisionChecker collisiongChecker;
 	public final TileManager tileManager = new TileManager(this, 10);
+	
+	public Dictionary<String, Sound> sounds = new Hashtable<String, Sound>();
+	
+	Sound sound;
+	
+	// Entities and objects
 	public final Player player = new Player(this, _keyHandler);
 	public final ArrayList<GameObject> objects = new ArrayList<GameObject>();	
 	
@@ -47,6 +55,7 @@ public class GamePanel extends JPanel implements Runnable {
 
 	public void setupGame() {
 		_gameObjectManager.setObject();
+		playMusic("gamemusic");
 	}
 	
 	public void startGameThread() {
@@ -98,5 +107,24 @@ public class GamePanel extends JPanel implements Runnable {
 		}		
 		player.draw(g);
 		g.dispose();
+	}
+	
+	public void playMusic(String soundName) {
+		sound = this.sounds.get(soundName);
+		sound.play();
+		sound.loop();
+	}
+	
+	public void stopMusic() {
+		if(sound == null) {
+			return;
+		}
+		
+		sound.stop();
+		sound = null;
+	}
+	public void playSoundEffect(String soundName) {
+		sound = this.sounds.get(soundName);
+		sound.play();		
 	}
 }
