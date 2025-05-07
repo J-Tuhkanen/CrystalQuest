@@ -7,14 +7,23 @@ public class KeyHandler implements KeyListener {
 
 	public boolean upPressed, downPressed, leftPressed, rightPressed;
 	
+	public boolean inventoryPressed;
+	public boolean inventoryReleased = true;
+	
 	@Override
 	public void keyTyped(KeyEvent e) {
-	}
+		
+	}	
 
 	@Override
 	public void keyPressed(KeyEvent e) {
+		
 		int code = e.getKeyCode();
 		
+		if(code == KeyEvent.VK_I && inventoryReleased) {			
+			inventoryPressed = true;
+			inventoryReleased = false;
+		}
 		if(code == KeyEvent.VK_W) {
 			this.upPressed = true;
 		}
@@ -36,6 +45,10 @@ public class KeyHandler implements KeyListener {
 	public void keyReleased(KeyEvent e) {
 		int code = e.getKeyCode();
 		
+		if(code == KeyEvent.VK_I) {
+			inventoryPressed = false;
+			inventoryReleased = true;
+		}
 		if(code == KeyEvent.VK_W) {
 			this.upPressed = false;
 		}

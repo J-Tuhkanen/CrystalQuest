@@ -32,6 +32,7 @@ public class GamePanel extends JPanel implements Runnable {
 	public final int screenHeight = tileSize * maxScreenRows;
 	public final CollisionChecker collisiongChecker;
 	public final TileManager tileManager = new TileManager(this, 10);
+	public final UI ui = new UI(this);
 	
 	public Dictionary<String, Sound> sounds = new Hashtable<String, Sound>();
 	
@@ -104,8 +105,11 @@ public class GamePanel extends JPanel implements Runnable {
 		tileManager.draw(g);
 		for(GameObject o : this.objects) {
 			o.draw(g, this);
-		}		
+		}
+		
 		player.draw(g);
+		ui.draw(g);
+		
 		g.dispose();
 	}
 	

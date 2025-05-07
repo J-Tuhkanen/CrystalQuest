@@ -18,6 +18,8 @@ public class Player extends Entity implements IUpdateable {
 	int tileSize = 0;
 	int spriteCounter = 0;
 	public int cameraX, cameraY;
+	public Boolean inventoryIsOpen = false;
+	public Boolean canToggleInventory = true;
 	
 	public Player(GamePanel gp, KeyHandler keyH) {
 		super(gp, "/player/boy");
@@ -52,7 +54,21 @@ public class Player extends Entity implements IUpdateable {
 		speed = 4;
 	}
 	
+
 	public void update() {
+		
+		if (keyH.inventoryPressed && canToggleInventory) {
+			canToggleInventory = false;
+			this.inventoryIsOpen = !this.inventoryIsOpen;
+		}
+		else if(keyH.inventoryReleased) {
+			canToggleInventory = true;
+		}
+		
+		updateMovement();		
+	}
+		
+	public void updateMovement() {
 		
 		if(keyH.upPressed == false && 
 		   keyH.downPressed == false && 
