@@ -17,7 +17,8 @@ public class Entity {
 
 	public int worldX, worldY, speed;
 	public final String imagePrefix;
-	public Direction direction = Direction.Down;
+	public Direction movementDirection = Direction.Down;
+	public Direction lookDirection = Direction.Down;
 	
 	public Rectangle collision;
 	public boolean collisionOn = false;

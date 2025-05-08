@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.MouseInfo;
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.Hashtable;
@@ -35,7 +37,6 @@ public class GamePanel extends JPanel implements Runnable {
 	public final UI ui = new UI(this);
 	
 	public Dictionary<String, Sound> sounds = new Hashtable<String, Sound>();
-	
 	Sound sound;
 	
 	// Entities and objects
@@ -62,7 +63,7 @@ public class GamePanel extends JPanel implements Runnable {
 	public void startGameThread() {
 		_gameThread.start();
 	}
-
+	
 	@Override
 	public void run() {
 		

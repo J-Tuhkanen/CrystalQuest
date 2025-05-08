@@ -45,7 +45,7 @@ public class CollisionChecker {
 		
 		Tile leftTile, rightTile;
 
-	    if(entity.direction == Direction.Up) {
+	    if(entity.movementDirection == Direction.Up) {
 	    	
 	    	int rowIndex = (topLeft.Y - entity.speed) / gp.tileSize;
 	    	int leftColumn = (topLeft.X + offSet) / gp.tileSize;
@@ -59,7 +59,7 @@ public class CollisionChecker {
 	        }
 	    }
 	    
-	    if(entity.direction == Direction.Down) {
+	    if(entity.movementDirection == Direction.Down) {
 	    	int rowIndex = (bottomLeft.Y + entity.speed) / gp.tileSize;
 	    	int leftColumn = (bottomLeft.X + offSet) / gp.tileSize;
 	    	int rightColumn = (bottomRight.X - offSet) / gp.tileSize;
@@ -72,7 +72,7 @@ public class CollisionChecker {
 	        }
 	    }
 	    
-	    if(entity.direction == Direction.Right) {
+	    if(entity.movementDirection == Direction.Right) {
 	    	int columnIndex = (topRight.X + entity.speed) / gp.tileSize;
 	        int topRow = topRight.Y / gp.tileSize;
 	        int bottomRow = bottomRight.Y / gp.tileSize;
@@ -84,7 +84,7 @@ public class CollisionChecker {
 	            entity.collisionOn = true;
 	        }
 	    }	
-	    if(entity.direction == Direction.Left) {
+	    if(entity.movementDirection == Direction.Left) {
 	    	int columnIndex = (topLeft.X - entity.speed) / gp.tileSize;
 	        int topRow = bottomLeft.Y / gp.tileSize;
 	        int bottomRow = bottomLeft.Y / gp.tileSize;
@@ -113,7 +113,7 @@ public class CollisionChecker {
 			gameObjectSolidArea.x = gameObject.worldX + gameObject.solidArea.x;
 			gameObjectSolidArea.y = gameObject.worldY + gameObject.solidArea.y;
 			
-			switch(entity.direction) {
+			switch(entity.movementDirection) {
 				case Up:
 					entitySolidArea.y -= entity.speed;
 					break;

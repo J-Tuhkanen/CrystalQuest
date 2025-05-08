@@ -35,14 +35,12 @@ public class UI {
 	}
 	
 	public void drawInventory(Graphics2D graphics) {
-
-		//g.drawImage(image, cameraX, cameraY, gp.tileSize, gp.tileSize, null);
 		graphics.drawImage(
 				this.inventoryImage, 
 				this.gamePanel.screenWidth / 2 - 200, 
 				this.gamePanel.screenHeight / 2 - 200,
 				400, 
-				400, 
+				200, 
 				null);
 	}
 }

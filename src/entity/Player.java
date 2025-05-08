@@ -1,8 +1,12 @@
 package entity;
 
 import java.awt.Graphics2D;
+import java.awt.MouseInfo;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+
+import javax.swing.SwingUtilities;
 
 import main.Direction;
 import main.GamePanel;
@@ -20,6 +24,10 @@ public class Player extends Entity implements IUpdateable {
 	public int cameraX, cameraY;
 	public Boolean inventoryIsOpen = false;
 	public Boolean canToggleInventory = true;
+
+	Point mousePosition = MouseInfo.getPointerInfo().getLocation();
+
+	private boolean mouseDown;
 	
 	public Player(GamePanel gp, KeyHandler keyH) {
 		super(gp, "/player/boy");
@@ -65,10 +73,34 @@ public class Player extends Entity implements IUpdateable {
 			canToggleInventory = true;
 		}
 		
+		updateMousePosition();
 		updateMovement();		
+	}
+	
+	public void updateMousePosition() {
+		
+		this.mousePosition = MouseInfo.getPointerInfo().getLocation();
+		SwingUtilities.convertPointFromScreen(mousePosition, gp);
+		
+		this.mouseDown = mousePosition.y >= this.cameraY + gp.tileSize / 2;
 	}
 		
 	public void updateMovement() {
+		
+		double degree = this.getMouseDegreeComparedToPlayerOnScreen();
+		
+		if (degree >= 45 && degree < 135) {
+			this.lookDirection = Direction.Right;
+		}
+		else if(degree >= 135 && degree < 225) {			
+			this.lookDirection = Direction.Down;		
+		}
+		else if(degree >= 225 && degree < 315) {			
+			this.lookDirection = Direction.Left;	
+		}
+		else {			
+			this.lookDirection = Direction.Up;
+		}
 		
 		if(keyH.upPressed == false && 
 		   keyH.downPressed == false && 
@@ -78,16 +110,16 @@ public class Player extends Entity implements IUpdateable {
 		}
 		
 		if(keyH.upPressed) {
-			direction = Direction.Up;			
+			this.movementDirection = Direction.Up;
 		}
 		if(keyH.downPressed) {
-			direction = Direction.Down;			
+			this.movementDirection = Direction.Down;
 		}
 		if(keyH.leftPressed) {
-			direction = Direction.Left;			
+			this.movementDirection = Direction.Left;
 		}
 		if(keyH.rightPressed) {
-			direction = Direction.Right;			
+			this.movementDirection = Direction.Right;
 		}
 		
 		// Check collision
@@ -98,16 +130,16 @@ public class Player extends Entity implements IUpdateable {
 		this.gp.collisiongChecker.checkObjectCollision(this, true);
 		
 		if (collisionOn == false) {
-			if (this.direction == Direction.Down) {
+			if (this.movementDirection == Direction.Down) {
 			    worldY += speed;
 			}
-			if (this.direction == Direction.Left) {
+			if (this.movementDirection == Direction.Left) {
 			    worldX -= speed;
 			}
-			if (this.direction == Direction.Right) {
+			if (this.movementDirection == Direction.Right) {
 			    worldX += speed;
 			}
-			if (this.direction == Direction.Up) {
+			if (this.movementDirection == Direction.Up) {
 			    worldY -= speed;
 			}
 
@@ -147,7 +179,7 @@ public class Player extends Entity implements IUpdateable {
 		
 		BufferedImage image = null;		
 		
-		switch(this.direction) {
+		switch(this.lookDirection) {
 			case Direction.Up:
 				image = this.up[spriteIndex];
 				break;
@@ -165,5 +197,17 @@ public class Player extends Entity implements IUpdateable {
 		}
 		
 		g.drawImage(image, cameraX, cameraY, gp.tileSize, gp.tileSize, null);
+	}
+	
+	public double getMouseDegreeComparedToPlayerOnScreen() {
+
+	    double dx   = this.mousePosition.x - this.gp.player.cameraX;      // +right
+	    double dy   = this.mousePosition.y - this.gp.player.cameraY;      // +down (Swing Y–axis)
+	    double deg  = Math.toDegrees(Math.atan2(dy, dx));  // 0° is right, CCW +
+	    double result = (deg + 450) % 360;             // shift → 0°=top, clockwise +
+		
+		System.out.println(result);
+		
+		return result;
 	}
 }
