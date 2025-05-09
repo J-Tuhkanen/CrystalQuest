@@ -5,10 +5,18 @@ import java.awt.event.KeyListener;
 
 public class KeyHandler implements KeyListener {
 
-	public boolean upPressed, downPressed, leftPressed, rightPressed;
+	// Pressed
+	public boolean upPressed, downPressed, leftPressed, rightPressed, inventoryPressed;
 	
-	public boolean inventoryPressed;
+	// Released
 	public boolean inventoryReleased = true;
+
+	private GamePanel gamePanel;
+	
+	public KeyHandler(GamePanel gamePanel) {
+		
+		this.gamePanel = gamePanel;
+	}
 	
 	@Override
 	public void keyTyped(KeyEvent e) {
@@ -20,6 +28,11 @@ public class KeyHandler implements KeyListener {
 		
 		int code = e.getKeyCode();
 		
+		if(code == KeyEvent.VK_ESCAPE) {
+			this.gamePanel.gameState = this.gamePanel.gameState == GameState.Paused 
+				? GameState.Running 
+				: GameState.Paused;
+		}
 		if(code == KeyEvent.VK_I && inventoryReleased) {			
 			inventoryPressed = true;
 			inventoryReleased = false;
@@ -40,7 +53,7 @@ public class KeyHandler implements KeyListener {
 			this.leftPressed = true;
 		}
 	}
-
+	
 	@Override
 	public void keyReleased(KeyEvent e) {
 		int code = e.getKeyCode();

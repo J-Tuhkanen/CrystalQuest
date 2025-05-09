@@ -1,5 +1,6 @@
 package main;
 
+import entity.OldManNpc;
 import object.Key;
 import object.TreasureChest;
 import object.WoodenDoor;
@@ -28,7 +29,14 @@ public class GameObjectManager {
 		WoodenDoor door = new WoodenDoor();
 		door.worldX = _gamePanel.tileSize * 22;
 		door.worldY = _gamePanel.tileSize * 25;
-		_gamePanel.objects.add(door);
+		_gamePanel.objects.add(door);		
+	}
+	
+	public void setNpc() {
 		
+		var oldMan = new OldManNpc(this._gamePanel);	
+		oldMan.worldX = 300;
+		oldMan.worldY = 300;
+		this._gamePanel.npcs.add(oldMan);
 	}
 }

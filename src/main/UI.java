@@ -29,7 +29,12 @@ public class UI {
 		graphics.setFont(arial_plain_40);
 		graphics.setColor(Color.white);
 		
-		if(this.gamePanel.player.inventoryIsOpen) {
+		if(this.gamePanel.gameState == GameState.Paused) {
+			
+			graphics.setFont(graphics.getFont().deriveFont(Font.BOLD, 80));
+			this.drawTextOnCenter("PAUSE", graphics);
+		}
+		else if(this.gamePanel.player.inventoryIsOpen) {
 			drawInventory(graphics);
 		}
 	}
@@ -42,5 +47,14 @@ public class UI {
 				400, 
 				200, 
 				null);
+	}
+	
+	private void drawTextOnCenter(String text, Graphics2D graphics) {
+		
+		int length = (int)graphics.getFontMetrics().getStringBounds(text, graphics).getWidth();
+		
+		graphics.drawString(text, 
+				this.gamePanel.screenWidth / 2 - length / 2,
+				this.gamePanel.screenHeight / 2);
 	}
 }

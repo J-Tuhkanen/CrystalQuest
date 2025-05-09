@@ -129,9 +129,7 @@ public class CollisionChecker {
 				
 			}
 			
-			if(entitySolidArea.intersects(gameObjectSolidArea)) {
-				System.out.println("Collision");
-				
+			if(entitySolidArea.intersects(gameObjectSolidArea)) {				
 				if(gameObject.collision) {
 					
 					entity.collisionOn = true;

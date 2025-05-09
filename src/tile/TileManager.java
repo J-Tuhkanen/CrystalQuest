@@ -1,6 +1,7 @@
 package tile;
 
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -41,8 +42,13 @@ public class TileManager {
 				worldMap.add(new ArrayList<Tile>());
 				for(String tileId : line.split(",")) {
 					
-					var image = ImageIO.read(getClass().getResourceAsStream(String.format("/tiles/%s.png", tileId)));
-					Tile tile = new Tile(tileId, image, hasCollision(tileId));
+					BufferedImage image = ImageIO.read(getClass().getResourceAsStream(String.format("/tiles/%s.png", tileId)));					
+					BufferedImage scaledImage = new BufferedImage(gamePanel.tileSize, gamePanel.tileSize, image.getType());
+					Graphics2D graphics = scaledImage.createGraphics();
+					graphics.drawImage(image, 0, 0, gamePanel.tileSize, gamePanel.tileSize, null);
+					graphics.dispose();
+					
+					Tile tile = new Tile(tileId, scaledImage, hasCollision(tileId));
 					tile.y = yOffSet;
 					tile.x = xOffSet;
 					
@@ -63,7 +69,7 @@ public class TileManager {
 		}
 	}
 		
-	public void draw(Graphics2D g) {		 		
+	public void draw(Graphics2D g) {
 		
 		Player player = gamePanel.player;
 		for(var list : this.worldMap) {			
@@ -82,7 +88,7 @@ public class TileManager {
 				int xOffSet = tile.x - player.worldX + player.cameraX;
 				int yOffSet = tile.y - player.worldY + player.cameraY;
 				
-				g.drawImage(tile.image, xOffSet, yOffSet, this.gamePanel.tileSize, this.gamePanel.tileSize, null);
+				g.drawImage(tile.image, xOffSet, yOffSet, null);
 			}		
 		}
 	}

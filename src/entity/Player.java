@@ -12,9 +12,8 @@ import main.Direction;
 import main.GamePanel;
 import main.KeyHandler;
 import object.GameObject;
-import abstraction.IUpdateable;
 
-public class Player extends Entity implements IUpdateable {
+public class Player extends Entity {
 	
 	KeyHandler keyH;
 	
@@ -26,8 +25,6 @@ public class Player extends Entity implements IUpdateable {
 	public Boolean canToggleInventory = true;
 
 	Point mousePosition = MouseInfo.getPointerInfo().getLocation();
-
-	private boolean mouseDown;
 	
 	public Player(GamePanel gp, KeyHandler keyH) {
 		super(gp, "/player/boy");
@@ -60,29 +57,12 @@ public class Player extends Entity implements IUpdateable {
 		worldX = gp.tileSize * 5;
 		worldY = gp.tileSize * 16;
 		speed = 4;
-	}
-	
-
-	public void update() {
-		
-		if (keyH.inventoryPressed && canToggleInventory) {
-			canToggleInventory = false;
-			this.inventoryIsOpen = !this.inventoryIsOpen;
-		}
-		else if(keyH.inventoryReleased) {
-			canToggleInventory = true;
-		}
-		
-		updateMousePosition();
-		updateMovement();		
-	}
+	}	
 	
 	public void updateMousePosition() {
 		
 		this.mousePosition = MouseInfo.getPointerInfo().getLocation();
 		SwingUtilities.convertPointFromScreen(mousePosition, gp);
-		
-		this.mouseDown = mousePosition.y >= this.cameraY + gp.tileSize / 2;
 	}
 		
 	public void updateMovement() {
@@ -129,18 +109,20 @@ public class Player extends Entity implements IUpdateable {
 		// Check object collision
 		this.gp.collisiongChecker.checkObjectCollision(this, true);
 		
+		int currentSpeed = calculateCurrentSpeed();
+		
 		if (collisionOn == false) {
 			if (this.movementDirection == Direction.Down) {
-			    worldY += speed;
+			    worldY += currentSpeed;
 			}
 			if (this.movementDirection == Direction.Left) {
-			    worldX -= speed;
+			    worldX -= currentSpeed;
 			}
 			if (this.movementDirection == Direction.Right) {
-			    worldX += speed;
+			    worldX += currentSpeed;
 			}
 			if (this.movementDirection == Direction.Up) {
-			    worldY -= speed;
+			    worldY -= currentSpeed;
 			}
 
 		}
@@ -175,6 +157,41 @@ public class Player extends Entity implements IUpdateable {
 		System.out.println("Inventory is full.");
 	}
 	
+	private double getMouseDegreeComparedToPlayerOnScreen() {
+
+	    double dx = this.mousePosition.x - this.gp.player.cameraX;
+	    double dy = this.mousePosition.y - this.gp.player.cameraY;
+	    double deg = Math.toDegrees(Math.atan2(dy, dx));
+	    double result = (deg + 450) % 360;
+				
+		return result;
+	}
+	
+	private int calculateCurrentSpeed() {
+		
+		int speedModifyer = 0;
+		
+		int currentSpeed = speed + speedModifyer;
+		
+		return currentSpeed;
+	}
+
+	@Override
+	public void update() {
+		
+		if (keyH.inventoryPressed && canToggleInventory) {
+			canToggleInventory = false;
+			this.inventoryIsOpen = !this.inventoryIsOpen;
+		}
+		else if(keyH.inventoryReleased) {
+			canToggleInventory = true;
+		}
+		
+		updateMousePosition();
+		updateMovement();		
+	}
+	
+	@Override
 	public void draw(Graphics2D g) {
 		
 		BufferedImage image = null;		
@@ -197,17 +214,5 @@ public class Player extends Entity implements IUpdateable {
 		}
 		
 		g.drawImage(image, cameraX, cameraY, gp.tileSize, gp.tileSize, null);
-	}
-	
-	public double getMouseDegreeComparedToPlayerOnScreen() {
-
-	    double dx   = this.mousePosition.x - this.gp.player.cameraX;      // +right
-	    double dy   = this.mousePosition.y - this.gp.player.cameraY;      // +down (Swing Y–axis)
-	    double deg  = Math.toDegrees(Math.atan2(dy, dx));  // 0° is right, CCW +
-	    double result = (deg + 450) % 360;             // shift → 0°=top, clockwise +
-		
-		System.out.println(result);
-		
-		return result;
 	}
 }

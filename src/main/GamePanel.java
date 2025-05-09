@@ -4,15 +4,13 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.MouseInfo;
-import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
 import javax.swing.JPanel;
 
-import abstraction.IUpdateable;
+import entity.Entity;
 import entity.Player;
 import object.GameObject;
 import tile.TileManager;
@@ -21,9 +19,8 @@ public class GamePanel extends JPanel implements Runnable {
 
 	private static final long serialVersionUID = 3169133952889093310L;
 	private final int _fps = 60;
-	private final KeyHandler _keyHandler = new KeyHandler();
+	private final KeyHandler _keyHandler = new KeyHandler(this);
 	private final Thread _gameThread;
-	private final ArrayList<IUpdateable> _updateables = new ArrayList<IUpdateable>();
 	private final GameObjectManager _gameObjectManager = new GameObjectManager(this);
 
 	// Screen settings
@@ -36,12 +33,14 @@ public class GamePanel extends JPanel implements Runnable {
 	public final TileManager tileManager = new TileManager(this, 10);
 	public final UI ui = new UI(this);
 	
-	public Dictionary<String, Sound> sounds = new Hashtable<String, Sound>();
+	public Dictionary<String, Sound> sounds = new Hashtable<>();
 	Sound sound;
 	
 	// Entities and objects
 	public final Player player = new Player(this, _keyHandler);
-	public final ArrayList<GameObject> objects = new ArrayList<GameObject>();	
+	public final ArrayList<GameObject> objects = new ArrayList<>();
+	public final ArrayList<Entity> npcs = new ArrayList<>();
+	public GameState gameState;
 	
 	public GamePanel() {
 				
@@ -52,12 +51,13 @@ public class GamePanel extends JPanel implements Runnable {
 		setFocusable(true);
 		_gameThread = new Thread(this);
 		this.collisiongChecker = new CollisionChecker(this);
-		this._updateables.add(player);
 	}	
 
 	public void setupGame() {
 		_gameObjectManager.setObject();
 		playMusic("gamemusic");
+		
+		gameState = GameState.Running;
 	}
 	
 	public void startGameThread() {
@@ -93,9 +93,11 @@ public class GamePanel extends JPanel implements Runnable {
 	
 	public void update() {
 		
-		for(IUpdateable u : this._updateables) {			
-			u.update();
+		if(gameState == GameState.Paused) {
+			return;
 		}
+				
+		player.update();
 	}
 	
 	public void paintComponent(Graphics graphics) {
