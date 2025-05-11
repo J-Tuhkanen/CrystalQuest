@@ -17,7 +17,7 @@ public class TileManager {
 	GamePanel gamePanel;
 	public final ArrayList<ArrayList<Tile>> worldMap = new ArrayList<ArrayList<Tile>>();
 	private final String[] collisionTileIds = new String[] {
-		"016", "032"
+		"016", "032", "023", "026"
 	};
 	
 	public TileManager(GamePanel gamePanel, int tilesCapacity) {

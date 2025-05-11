@@ -101,8 +101,8 @@ public class GamePanel extends JPanel implements Runnable {
 				
 		for(var npc : this.npcs) {
 			
-			npc.update();
 			npc.updateAction();
+			npc.update();
 		}
 		player.update();
 	}

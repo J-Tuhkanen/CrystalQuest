@@ -24,30 +24,40 @@ public class OldManNpc extends Npc {
 		}
 		
 		Random random = new Random();
-		int rnd = random.nextInt(400)+100; // Random in range of 100-400
-		
+		int rnd = random.nextInt(100)+1; // Random in range of 100-400
+		System.out.println(rnd);
 		this.actionLockCounter = random.nextInt(100)+1;
 		
-		if(rnd <= 25) {
+		if(rnd > 95) {
 			this.movementDirection = Direction.Up;
 			this.lookDirection = Direction.Up;
 		}
-		else if(rnd <= 50) {
+		else if(rnd > 90) {
 			this.movementDirection = Direction.Left;
 			this.lookDirection = Direction.Left;
 		}
-		else if(rnd <= 75) {
+		else if(rnd > 85) {
 			this.movementDirection = Direction.Down;
 			this.lookDirection = Direction.Down;
 		}
-		else {
+		else if(rnd > 80) {
 			this.movementDirection = Direction.Right;
 			this.lookDirection = Direction.Right;
+		}
+		else {
+			this.movementDirection = null;
 		}
 	}
 	
 	@Override
 	public void update() {
+		
+		if(this.movementDirection != null) {
+			this.updateMovement();
+		}
+	}
+	
+	private void updateMovement() {
 		
 		this.checkCollision();
 		
@@ -59,5 +69,5 @@ public class OldManNpc extends Npc {
 		}
 		
 		this.updateSprite();
-	}	
+	}
 }

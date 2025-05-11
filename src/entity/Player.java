@@ -17,7 +17,6 @@ public class Player extends Entity {
 	KeyHandler keyH;
 	
 	GameObject inventory[] = new GameObject[8];
-	int tileSize = 0;
 	int spriteCounter = 0;
 	public int cameraX, cameraY;
 	public Boolean inventoryIsOpen = false;
@@ -29,19 +28,19 @@ public class Player extends Entity {
 		super(gp, "/player/boy");
 		this.gp = gp;
 		this.keyH = keyH;
-		this.tileSize = gp.tileSize;
 		
 		this.cameraX = gp.screenWidth/2;
 		this.cameraY = gp.screenHeight/2;
 		
-		setDefaultValues();
+		speed = 4;
+		teleportTo(gp.tileSize * 5, gp.tileSize * 16); 
 	}
 	
-	public void setDefaultValues() {
-		worldX = gp.tileSize * 5;
-		worldY = gp.tileSize * 16;
-		speed = 4;
-	}	
+	public void teleportTo(int worldX, int worldY) {
+
+		this.worldX = worldX;
+		this.worldY = worldY;
+	}
 	
 	public void updateMousePosition() {
 		
@@ -110,16 +109,6 @@ public class Player extends Entity {
 		}
 		System.out.println("Inventory is full.");
 	}
-	
-	private double getMouseDegreeComparedToPlayerOnScreen() {
-
-	    double dx = this.mousePosition.x - this.gp.player.cameraX;
-	    double dy = this.mousePosition.y - this.gp.player.cameraY;
-	    double deg = Math.toDegrees(Math.atan2(dy, dx));
-	    double result = (deg + 450) % 360;
-				
-		return result;
-	}
 
 	@Override
 	public void update() {
@@ -159,5 +148,15 @@ public class Player extends Entity {
 		}
 		
 		g.drawImage(image, cameraX, cameraY, gp.tileSize, gp.tileSize, null);
+	}
+	
+	private double getMouseDegreeComparedToPlayerOnScreen() {
+
+	    double dx = this.mousePosition.x - this.gp.player.cameraX;
+	    double dy = this.mousePosition.y - this.gp.player.cameraY;
+	    double deg = Math.toDegrees(Math.atan2(dy, dx));
+	    double result = (deg + 450) % 360;
+				
+		return result;
 	}
 }
