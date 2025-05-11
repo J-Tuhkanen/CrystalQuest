@@ -3,6 +3,7 @@ package main;
 import java.awt.Rectangle;
 
 import entity.Entity;
+import entity.Npc;
 import entity.Player;
 import tile.Tile;
 
@@ -98,7 +99,7 @@ public class CollisionChecker {
 	    }	
 	}
 	
-	public void checkObjectCollision(Entity entity, boolean player) {
+	public void checkObjectCollision(Entity entity, boolean canPickUpItems) {
 						
 		// Run the check in reverse so we can have a clean loop with a delete within the collection.
 		for (int i = gp.objects.size() - 1; i > -1 ; i--) {
@@ -125,8 +126,7 @@ public class CollisionChecker {
 					break;
 				case Right:
 					entitySolidArea.x += entity.speed;
-					break;
-				
+					break;				
 			}
 			
 			if(entitySolidArea.intersects(gameObjectSolidArea)) {				
@@ -134,10 +134,80 @@ public class CollisionChecker {
 					
 					entity.collisionOn = true;
 				}
-				else if(player) {
+				else if(canPickUpItems) {
 					((Player)entity).pickUpObject(gameObject);
 				}
 			}
+		}
+	}
+	
+	public void checkEntityCollision(Entity entity) {
+		
+		// Run the check in reverse so we can have a clean loop with a delete within the collection.
+		for (Entity npc : gp.npcs) {
+			
+			if(npc.equals(entity)) {
+				continue;
+			}
+			
+			var entitySolidArea = new Rectangle(entity.hitBox);
+			var gameObjectSolidArea = new Rectangle(npc.hitBox);
+			
+			entitySolidArea.x = entity.worldX + entity.hitBox.x;
+			entitySolidArea.y = entity.worldY + entity.hitBox.y;
+						
+			gameObjectSolidArea.x = npc.worldX + npc.hitBox.x;
+			gameObjectSolidArea.y = npc.worldY + npc.hitBox.y;
+			
+			switch(entity.movementDirection) {
+				case Up:
+					entitySolidArea.y -= entity.speed;
+					break;
+				case Down:
+					entitySolidArea.y += entity.speed;	
+					break;
+				case Left:
+					entitySolidArea.x -= entity.speed;
+					break;
+				case Right:
+					entitySolidArea.x += entity.speed;
+					break;				
+			}
+			
+			if(entitySolidArea.intersects(gameObjectSolidArea)) {
+				entity.collisionOn = true;
+			}
+		}
+	}
+	
+	public void checkPlayerCollision(Npc npc) {
+		
+		var playerSolidArea = new Rectangle(gp.player.hitBox);
+		var npcSolidArea = new Rectangle(npc.hitBox);
+		
+		playerSolidArea.x = gp.player.worldX + gp.player.hitBox.x;
+		playerSolidArea.y = gp.player.worldY + gp.player.hitBox.y;
+					
+		npcSolidArea.x = npc.worldX + npc.hitBox.x;
+		npcSolidArea.y = npc.worldY + npc.hitBox.y;
+		
+		switch(npc.movementDirection) {
+			case Up:
+				npcSolidArea.y -= npc.speed;
+				break;
+			case Down:
+				npcSolidArea.y += npc.speed;	
+				break;
+			case Left:
+				npcSolidArea.x -= npc.speed;
+				break;
+			case Right:
+				npcSolidArea.x += npc.speed;
+				break;				
+		}
+		
+		if(npcSolidArea.intersects(playerSolidArea)) {
+			npc.collisionOn = true;
 		}
 	}
 }

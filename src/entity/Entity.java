@@ -26,7 +26,6 @@ public abstract class Entity  {
 	public boolean collisionOn = false;
 	
 	public Rectangle hitBox;
-	public int solidAreaDefaultX, solidAreaDefaultY;
 	
 	public BufferedImage[] up = new BufferedImage[this.spriteCount];
 	public BufferedImage[] left = new BufferedImage[this.spriteCount];
@@ -51,6 +50,7 @@ public abstract class Entity  {
 	public abstract void draw(Graphics2D g);
 	
 	public void setupCollision() {
+		
 		this.collision = new Rectangle();
 		this.collision.height = 10;
 		this.collision.width = gp.tileSize;
@@ -62,18 +62,16 @@ public abstract class Entity  {
 		this.hitBox.y = 16;
 		this.hitBox.width = 32;
 		this.hitBox.height = 32;
-		
-		this.solidAreaDefaultX = this.hitBox.x;
-		this.solidAreaDefaultY = this.hitBox.y;
 	}
 	
-	protected void checkCollision() {
+	protected void checkCollision(boolean canPickupItems) {
 		
 		this.collisionOn = false;
 		this.gp.collisiongChecker.checkTile(this);		
-		
+				
 		// Check object collision
-		this.gp.collisiongChecker.checkObjectCollision(this, true);
+		this.gp.collisiongChecker.checkObjectCollision(this, canPickupItems);
+		this.gp.collisiongChecker.checkEntityCollision(this);
 	}
 	
 	protected void move() {

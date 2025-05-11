@@ -46,4 +46,12 @@ public abstract class Npc extends Entity {
 			g.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
 		}	
 	}
+	
+	@Override
+	protected void checkCollision(boolean canPickupItems) {
+		super.checkCollision(canPickupItems);
+		if(this.collisionOn == false) {
+			this.gp.collisiongChecker.checkPlayerCollision(this);
+		}
+	}
 }

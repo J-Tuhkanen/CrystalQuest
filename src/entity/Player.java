@@ -85,7 +85,7 @@ public class Player extends Entity {
 			this.movementDirection = Direction.Right;
 		}
 		
-		this.checkCollision();
+		this.checkCollision(true);
 		
 		if (collisionOn == false) {
 			this.move();

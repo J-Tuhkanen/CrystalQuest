@@ -24,8 +24,7 @@ public class OldManNpc extends Npc {
 		}
 		
 		Random random = new Random();
-		int rnd = random.nextInt(100)+1; // Random in range of 100-400
-		System.out.println(rnd);
+		int rnd = random.nextInt(100)+1;
 		this.actionLockCounter = random.nextInt(100)+1;
 		
 		if(rnd > 95) {
@@ -59,7 +58,7 @@ public class OldManNpc extends Npc {
 	
 	private void updateMovement() {
 		
-		this.checkCollision();
+		this.checkCollision(false);
 		
 		if (collisionOn == false) {
 			this.move();

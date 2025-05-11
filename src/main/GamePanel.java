@@ -98,7 +98,6 @@ public class GamePanel extends JPanel implements Runnable {
 		if(gameState == GameState.Paused) {
 			return;
 		}
-				
 		for(var npc : this.npcs) {
 			
 			npc.updateAction();

@@ -32,7 +32,7 @@ public class TileManager {
 			int yOffSet = 0;
 			int xOffSet = 0;
 			int columnIndex = 0;
-
+			
 			InputStream stream = getClass().getResourceAsStream(mapFilePath);
 			BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
 						

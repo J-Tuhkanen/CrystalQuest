@@ -13,7 +13,6 @@ public abstract class GameObject {
 	public boolean collision = false;
 	public int worldX, worldY;
 	public Rectangle solidArea = new Rectangle(0,0,48,48);
-	public int solidAreaDefaultX, solidAreaDefaultY = 0;
 	
 	public void draw(Graphics2D graphics, GamePanel gp) {
 		
