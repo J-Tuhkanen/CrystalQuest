@@ -11,6 +11,7 @@ import java.util.Hashtable;
 import javax.swing.JPanel;
 
 import entity.Entity;
+import entity.Npc;
 import entity.Player;
 import object.GameObject;
 import tile.TileManager;
@@ -39,7 +40,7 @@ public class GamePanel extends JPanel implements Runnable {
 	// Entities and objects
 	public final Player player = new Player(this, _keyHandler);
 	public final ArrayList<GameObject> objects = new ArrayList<>();
-	public final ArrayList<Entity> npcs = new ArrayList<>();
+	public final ArrayList<Npc> npcs = new ArrayList<>();
 	public GameState gameState;
 	
 	public GamePanel() {
@@ -55,6 +56,7 @@ public class GamePanel extends JPanel implements Runnable {
 
 	public void setupGame() {
 		_gameObjectManager.setObject();
+		_gameObjectManager.setNpc();
 		playMusic("gamemusic");
 		
 		gameState = GameState.Running;
@@ -97,6 +99,11 @@ public class GamePanel extends JPanel implements Runnable {
 			return;
 		}
 				
+		for(var npc : this.npcs) {
+			
+			npc.update();
+			npc.updateAction();
+		}
 		player.update();
 	}
 	
@@ -106,8 +113,13 @@ public class GamePanel extends JPanel implements Runnable {
 		Graphics2D g = (Graphics2D)graphics;
 		
 		tileManager.draw(g);
+		
 		for(GameObject o : this.objects) {
 			o.draw(g, this);
+		}
+		
+		for(Entity npc : this.npcs) {			
+			npc.draw(g);
 		}
 		
 		player.draw(g);

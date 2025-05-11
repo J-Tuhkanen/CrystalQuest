@@ -11,10 +11,12 @@ import main.GamePanel;
 
 public abstract class Entity  {
 
+	private int _spriteCounter = 0;
 	protected GamePanel gp;
 	protected int spriteCount = 2;
 	protected int spriteIndex = 0;
-
+	protected int actionLockCounter = 0;
+	
 	public int worldX, worldY, speed;
 	public final String imagePrefix;
 	public Direction movementDirection = Direction.Down;
@@ -35,6 +37,7 @@ public abstract class Entity  {
 		this.gp = gp;
 		this.imagePrefix = imagePrefix;
 		loadImages();
+		setupCollision();
 	}
 	
 	public Entity(GamePanel gp, String imagePrefix, int spriteCount) {
@@ -46,6 +49,64 @@ public abstract class Entity  {
 	
 	public abstract void update();	
 	public abstract void draw(Graphics2D g);
+	
+	public void setupCollision() {
+		this.collision = new Rectangle();
+		this.collision.height = 10;
+		this.collision.width = gp.tileSize;
+		this.collision.x = 0;
+		this.collision.y = gp.tileSize - this.collision.height;
+		
+		this.hitBox = new Rectangle();
+		this.hitBox.x = 8;
+		this.hitBox.y = 16;
+		this.hitBox.width = 32;
+		this.hitBox.height = 32;
+		
+		this.solidAreaDefaultX = this.hitBox.x;
+		this.solidAreaDefaultY = this.hitBox.y;
+	}
+	
+	protected void checkCollision() {
+		
+		this.collisionOn = false;
+		this.gp.collisiongChecker.checkTile(this);		
+		
+		// Check object collision
+		this.gp.collisiongChecker.checkObjectCollision(this, true);
+	}
+	
+	protected void move() {
+		
+		if (this.movementDirection == Direction.Down) {
+		    worldY += this.speed;
+		}
+		if (this.movementDirection == Direction.Left) {
+		    worldX -= this.speed;
+		}
+		if (this.movementDirection == Direction.Right) {
+		    worldX += this.speed;
+		}
+		if (this.movementDirection == Direction.Up) {
+		    worldY -= this.speed;
+		}
+	}
+	
+	protected void updateSprite() {
+		
+		this._spriteCounter++;
+		
+		if(this._spriteCounter > 13) {
+			
+			if(this.spriteIndex + 1 >= this.spriteCount) {
+				this.spriteIndex = 0;
+			}
+			else {			
+				this.spriteIndex++;
+			}
+			this._spriteCounter = 0;
+		}
+	}
 	
 	private void loadImages() {
 		try {			

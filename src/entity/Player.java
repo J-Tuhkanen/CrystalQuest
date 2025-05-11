@@ -3,7 +3,6 @@ package entity;
 import java.awt.Graphics2D;
 import java.awt.MouseInfo;
 import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 import javax.swing.SwingUtilities;
@@ -31,24 +30,9 @@ public class Player extends Entity {
 		this.gp = gp;
 		this.keyH = keyH;
 		this.tileSize = gp.tileSize;
-		this.collision = new Rectangle();
-		
-		this.collision.height = 10;
-		this.collision.width = gp.tileSize;
-		this.collision.x = 0;
-		this.collision.y = gp.tileSize - this.collision.height;
 		
 		this.cameraX = gp.screenWidth/2;
 		this.cameraY = gp.screenHeight/2;
-		
-		this.hitBox = new Rectangle();
-		this.hitBox.x = 8;
-		this.hitBox.y = 16;
-		this.hitBox.width = 32;
-		this.hitBox.height = 32;
-		
-		this.solidAreaDefaultX = this.hitBox.x;
-		this.solidAreaDefaultY = this.hitBox.y;
 		
 		setDefaultValues();
 	}
@@ -102,43 +86,13 @@ public class Player extends Entity {
 			this.movementDirection = Direction.Right;
 		}
 		
-		// Check collision
-		collisionOn = false;
-		this.gp.collisiongChecker.checkTile(this);
-		
-		// Check object collision
-		this.gp.collisiongChecker.checkObjectCollision(this, true);
-		
-		int currentSpeed = calculateCurrentSpeed();
+		this.checkCollision();
 		
 		if (collisionOn == false) {
-			if (this.movementDirection == Direction.Down) {
-			    worldY += currentSpeed;
-			}
-			if (this.movementDirection == Direction.Left) {
-			    worldX -= currentSpeed;
-			}
-			if (this.movementDirection == Direction.Right) {
-			    worldX += currentSpeed;
-			}
-			if (this.movementDirection == Direction.Up) {
-			    worldY -= currentSpeed;
-			}
-
+			this.move();
 		}
 		
-		this.spriteCounter++;
-		
-		if(this.spriteCounter > 13) {
-			
-			if(this.spriteIndex + 1 >= this.spriteCount) {
-				this.spriteIndex = 0;
-			}
-			else {			
-				this.spriteIndex++;
-			}
-			this.spriteCounter = 0;
-		}
+		this.updateSprite();
 	}
 	
 	public void pickUpObject(GameObject obj) {
@@ -165,15 +119,6 @@ public class Player extends Entity {
 	    double result = (deg + 450) % 360;
 				
 		return result;
-	}
-	
-	private int calculateCurrentSpeed() {
-		
-		int speedModifyer = 0;
-		
-		int currentSpeed = speed + speedModifyer;
-		
-		return currentSpeed;
 	}
 
 	@Override

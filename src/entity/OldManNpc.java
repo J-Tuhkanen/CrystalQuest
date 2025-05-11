@@ -1,51 +1,63 @@
 package entity;
 
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
+import java.util.Random;
 
 import main.Direction;
 import main.GamePanel;
 
-public class OldManNpc extends Entity {
-
-	private GamePanel gamePanel;
+public class OldManNpc extends Npc {
 
 	public OldManNpc(GamePanel gp) {
 		
 		super(gp, "/npc/oldman");
-		this.gamePanel = gp;
 		this.speed = 1;
+	}
+	
+	@Override 
+	public void updateAction() {
+		
+		--this.actionLockCounter;
+		
+		// Do nothing if action lock counter is not 0.
+		if(this.actionLockCounter > 0) {
+			return;
+		}
+		
+		Random random = new Random();
+		int rnd = random.nextInt(400)+100; // Random in range of 100-400
+		
+		this.actionLockCounter = random.nextInt(100)+1;
+		
+		if(rnd <= 25) {
+			this.movementDirection = Direction.Up;
+			this.lookDirection = Direction.Up;
+		}
+		else if(rnd <= 50) {
+			this.movementDirection = Direction.Left;
+			this.lookDirection = Direction.Left;
+		}
+		else if(rnd <= 75) {
+			this.movementDirection = Direction.Down;
+			this.lookDirection = Direction.Down;
+		}
+		else {
+			this.movementDirection = Direction.Right;
+			this.lookDirection = Direction.Right;
+		}
 	}
 	
 	@Override
 	public void update() {
-	
-	}
-
-
-	@Override
-	public void draw(Graphics2D g) {
-		this.spriteIndex = 1;
-			
-		BufferedImage image = null;		
 		
-		switch(this.lookDirection) {
-			case Direction.Up:
-				image = this.up[spriteIndex];
-				break;
-			case Direction.Down:
-				image = this.down[spriteIndex];
-				break;
-			case Direction.Left:
-				image = this.left[spriteIndex];
-				break;
-			case Direction.Right:
-				image = this.right[spriteIndex];
-				break;
-			default:
-				break;
+		this.checkCollision();
+		
+		if (collisionOn == false) {
+			this.move();
+		}
+		else {			
+			this.actionLockCounter = -1;
 		}
 		
-		g.drawImage(image, worldX, worldY, gp.tileSize, gp.tileSize, null);
-	}
+		this.updateSprite();
+	}	
 }
