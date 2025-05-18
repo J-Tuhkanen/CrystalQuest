@@ -10,11 +10,13 @@ import javax.swing.SwingUtilities;
 import main.Direction;
 import main.GamePanel;
 import main.KeyHandler;
+import main.MouseHandler;
 import object.GameObject;
 
 public class Player extends Entity {
 	
 	KeyHandler keyH;
+	MouseHandler mouseH;
 	
 	GameObject inventory[] = new GameObject[8];
 	int spriteCounter = 0;
@@ -24,10 +26,11 @@ public class Player extends Entity {
 
 	Point mousePosition = MouseInfo.getPointerInfo().getLocation();
 	
-	public Player(GamePanel gp, KeyHandler keyH) {
+	public Player(GamePanel gp, KeyHandler keyH, MouseHandler mouseH) {
 		super(gp, "/player/boy");
 		this.gp = gp;
 		this.keyH = keyH;
+		this.mouseH = mouseH;
 		
 		this.cameraX = gp.screenWidth/2;
 		this.cameraY = gp.screenHeight/2;
@@ -50,21 +53,6 @@ public class Player extends Entity {
 		
 	public void updateMovement() {
 		
-		double degree = this.getMouseDegreeComparedToPlayerOnScreen();
-		
-		if (degree >= 45 && degree < 135) {
-			this.lookDirection = Direction.Right;
-		}
-		else if(degree >= 135 && degree < 225) {			
-			this.lookDirection = Direction.Down;		
-		}
-		else if(degree >= 225 && degree < 315) {			
-			this.lookDirection = Direction.Left;	
-		}
-		else {			
-			this.lookDirection = Direction.Up;
-		}
-		
 		if(keyH.upPressed == false && 
 		   keyH.downPressed == false && 
 		   keyH.leftPressed == false && 
@@ -85,6 +73,7 @@ public class Player extends Entity {
 			this.movementDirection = Direction.Right;
 		}
 		
+		this.UpdateLookDirection();		
 		this.checkCollision(true);
 		
 		if (collisionOn == false) {
@@ -148,6 +137,29 @@ public class Player extends Entity {
 		}
 		
 		g.drawImage(image, cameraX, cameraY, gp.tileSize, gp.tileSize, null);
+	}
+	
+	private void UpdateLookDirection() {
+		if(this.mouseH.RightMouseKeyPressed) {
+			
+			double degree = this.getMouseDegreeComparedToPlayerOnScreen();
+			
+			if (degree >= 45 && degree < 135) {
+				this.lookDirection = Direction.Right;
+			}
+			else if(degree >= 135 && degree < 225) {			
+				this.lookDirection = Direction.Down;		
+			}
+			else if(degree >= 225 && degree < 315) {			
+				this.lookDirection = Direction.Left;	
+			}
+			else {			
+				this.lookDirection = Direction.Up;
+			}
+		}
+		else {
+			this.lookDirection = this.movementDirection;
+		}
 	}
 	
 	private double getMouseDegreeComparedToPlayerOnScreen() {

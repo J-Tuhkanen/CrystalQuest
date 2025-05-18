@@ -21,6 +21,7 @@ public class GamePanel extends JPanel implements Runnable {
 	private static final long serialVersionUID = 3169133952889093310L;
 	private final int _fps = 60;
 	private final KeyHandler _keyHandler = new KeyHandler(this);
+	private final MouseHandler _mouseHandler = new MouseHandler(this);
 	private final Thread _gameThread;
 	private final GameObjectManager _gameObjectManager = new GameObjectManager(this);
 
@@ -38,7 +39,7 @@ public class GamePanel extends JPanel implements Runnable {
 	Sound sound;
 	
 	// Entities and objects
-	public final Player player = new Player(this, _keyHandler);
+	public final Player player = new Player(this, _keyHandler, _mouseHandler);
 	public final ArrayList<GameObject> objects = new ArrayList<>();
 	public final ArrayList<Npc> npcs = new ArrayList<>();
 	public GameState gameState;
@@ -49,6 +50,7 @@ public class GamePanel extends JPanel implements Runnable {
 		setBackground(Color.black);
 		setDoubleBuffered(true);
 		addKeyListener(_keyHandler);
+		addMouseListener(_mouseHandler);
 		setFocusable(true);
 		_gameThread = new Thread(this);
 		this.collisiongChecker = new CollisionChecker(this);

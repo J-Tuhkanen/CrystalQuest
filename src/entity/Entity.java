@@ -76,17 +76,21 @@ public abstract class Entity  {
 	
 	protected void move() {
 		
+		int lookDirectionPenalty = this.lookDirection != this.movementDirection	? 2 : 0;
+		
+		int currentSpeed = this.speed - lookDirectionPenalty;
+		
 		if (this.movementDirection == Direction.Down) {
-		    worldY += this.speed;
+		    worldY += currentSpeed;
 		}
 		if (this.movementDirection == Direction.Left) {
-		    worldX -= this.speed;
+		    worldX -= currentSpeed;
 		}
 		if (this.movementDirection == Direction.Right) {
-		    worldX += this.speed;
+		    worldX += currentSpeed;
 		}
 		if (this.movementDirection == Direction.Up) {
-		    worldY -= this.speed;
+		    worldY -= currentSpeed;
 		}
 	}
 	
