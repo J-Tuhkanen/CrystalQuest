@@ -7,18 +7,15 @@ import javax.sound.sampled.Clip;
 
 public class Sound {
 	
-	Clip clip;
-	URL soundUrl;
+	private Clip _clip;
+	private URL _soundUrl;
 	
 	public Sound(String resoursePath) {
-		soundUrl = getClass().getResource(resoursePath);
-		setFile();
-	}
-	
-	public void setFile() {
+		_soundUrl = getClass().getResource(resoursePath);
+		
 		try {			
-			clip = AudioSystem.getClip();
-			clip.open(AudioSystem.getAudioInputStream(soundUrl));
+			_clip = AudioSystem.getClip();
+			_clip.open(AudioSystem.getAudioInputStream(_soundUrl));
 		}
 		catch(Exception e) {
 			e.printStackTrace();
@@ -26,14 +23,14 @@ public class Sound {
 	}
 	
 	public void play() {
-		clip.start();
+		_clip.start();
 	}
 	
 	public void loop() {
-		clip.loop(Clip.LOOP_CONTINUOUSLY);
+		_clip.loop(Clip.LOOP_CONTINUOUSLY);
 	}
 	
 	public void stop() {
-		clip.stop();
+		_clip.stop();
 	}
 }
