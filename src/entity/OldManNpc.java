@@ -2,8 +2,8 @@ package entity;
 
 import java.util.Random;
 
-import main.Direction;
 import main.GamePanel;
+import main.Enum.Direction;
 
 public class OldManNpc extends Npc {
 

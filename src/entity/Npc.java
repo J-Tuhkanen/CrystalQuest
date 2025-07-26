@@ -3,8 +3,8 @@ package entity;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
-import main.Direction;
 import main.GamePanel;
+import main.Enum.Direction;
 
 public abstract class Npc extends Entity {
 

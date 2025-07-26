@@ -3,6 +3,8 @@ package main;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+import main.Enum.GameState;
+
 public class KeyHandler implements KeyListener {
 
 	// Pressed

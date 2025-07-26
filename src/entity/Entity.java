@@ -6,8 +6,8 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 
-import main.Direction;
 import main.GamePanel;
+import main.Enum.Direction;
 
 public abstract class Entity  {
 

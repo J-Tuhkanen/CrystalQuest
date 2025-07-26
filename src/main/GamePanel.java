@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 import entity.Entity;
 import entity.Npc;
 import entity.Player;
+import main.Enum.GameState;
 import object.GameObject;
 import tile.TileManager;
 

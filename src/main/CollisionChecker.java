@@ -5,6 +5,7 @@ import java.awt.Rectangle;
 import entity.Entity;
 import entity.Npc;
 import entity.Player;
+import main.Enum.Direction;
 import tile.Tile;
 
 public class CollisionChecker {

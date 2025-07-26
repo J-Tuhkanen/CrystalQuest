@@ -3,6 +3,8 @@ package main;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import main.Enum.GameState;
+
 public class MouseHandler extends MouseAdapter  {
 
 	private final GamePanel _gamePanel;

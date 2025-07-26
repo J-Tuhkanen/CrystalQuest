@@ -7,10 +7,10 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.SwingUtilities;
 
-import main.Direction;
 import main.GamePanel;
 import main.KeyHandler;
 import main.MouseHandler;
+import main.Enum.Direction;
 import object.GameObject;
 
 public class Player extends Entity {
@@ -53,12 +53,10 @@ public class Player extends Entity {
 		
 	public void updateMovement() {
 		
-		if(keyH.upPressed == false && 
-		   keyH.downPressed == false && 
-		   keyH.leftPressed == false && 
-		   keyH.rightPressed == false) {
-			return;
-		}
+		boolean isMoving = keyH.upPressed == true || 
+				   keyH.downPressed == true || 
+				   keyH.leftPressed == true || 
+				   keyH.rightPressed == true;
 		
 		if(keyH.upPressed) {
 			this.movementDirection = Direction.Up;
@@ -73,14 +71,13 @@ public class Player extends Entity {
 			this.movementDirection = Direction.Right;
 		}
 		
-		this.UpdateLookDirection();		
+		this.UpdateLookDirection(isMoving);		
 		this.checkCollision(true);
 		
-		if (collisionOn == false) {
+		if (isMoving && collisionOn == false) {
 			this.move();
-		}
-		
-		this.updateSprite();
+			this.updateSprite();
+		}		
 	}
 	
 	public void pickUpObject(GameObject obj) {
@@ -139,7 +136,7 @@ public class Player extends Entity {
 		g.drawImage(image, cameraX, cameraY, gp.tileSize, gp.tileSize, null);
 	}
 	
-	private void UpdateLookDirection() {
+	private void UpdateLookDirection(boolean isMoving) {
 		if(this.mouseH.RightMouseKeyPressed) {
 			
 			double degree = this.getMouseDegreeComparedToPlayerOnScreen();
@@ -157,7 +154,7 @@ public class Player extends Entity {
 				this.lookDirection = Direction.Up;
 			}
 		}
-		else {
+		else if(isMoving) {
 			this.lookDirection = this.movementDirection;
 		}
 	}
