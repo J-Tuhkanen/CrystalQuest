@@ -137,6 +137,7 @@ public class Player extends Entity {
 	}
 	
 	private void UpdateLookDirection(boolean isMoving) {
+		
 		if(this.mouseH.RightMouseKeyPressed) {
 			
 			double degree = this.getMouseDegreeComparedToPlayerOnScreen();
