@@ -16,16 +16,13 @@ public class Main {
 		JFrame window = new JFrame();
 		JLayeredPane mainPane = new JLayeredPane();
 		GamePanel gamePanel = new GamePanel();
-		JPanel uiPanel = new JPanel();
-		var label = new JLabel("Testing label");
+		JPanel uiPanel = new UIPanel();
 
 		mainPane.setPreferredSize(new Dimension(gamePanel.screenWidth, gamePanel.screenHeight));
 		gamePanel.setBounds(0, 0, gamePanel.screenWidth, gamePanel.screenHeight);
 		
-		uiPanel.add(label);
 		uiPanel.setBounds(0, 0, gamePanel.screenWidth, gamePanel.screenHeight);
 		uiPanel.setOpaque(false);
-		label.setOpaque(false);
 		
 		window.setTitle("CystalQuest");
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
