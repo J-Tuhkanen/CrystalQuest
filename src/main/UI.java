@@ -62,7 +62,15 @@ public class UI {
 				
 				int slotX = inventoryX + slotMargin + slotMargin * y + inventorySlotSize * y;
 				int slotY = inventoryY + inventoryHeight / 4 + slotMargin + slotMargin * i + inventorySlotSize * i;
-				drawThemedElement(graphics, slotX, slotY, inventorySlotSize, inventorySlotSize, new Color(186, 175, 159, 230));
+				
+				boolean isSelectedSlot = inventory.selectedRowIndex == i && inventory.selectedColumnIndex == y;
+				
+				if(isSelectedSlot) {
+					drawThemedElement(graphics, slotX, slotY, inventorySlotSize, inventorySlotSize, new Color(255, 255, 255, 230));					
+				}
+				else {					
+					drawThemedElement(graphics, slotX, slotY, inventorySlotSize, inventorySlotSize, new Color(186, 175, 159, 230));
+				}
 			}
 		}
 	}

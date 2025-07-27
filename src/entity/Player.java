@@ -20,7 +20,6 @@ public class Player extends Entity {
 	MouseHandler mouseH;
 	
 	public Inventory inventory = new Inventory();
-	//GameObject inventory[] = new GameObject[8];
 	int spriteCounter = 0;
 	public int cameraX, cameraY;
 	public Boolean inventoryIsOpen = false;
@@ -55,10 +54,10 @@ public class Player extends Entity {
 		
 	public void updateMovement() {
 		
-		boolean isMoving = keyH.upPressed == true || 
-				   keyH.downPressed == true || 
-				   keyH.leftPressed == true || 
-				   keyH.rightPressed == true;
+		boolean isMoving = keyH.upPressed || 
+				   keyH.downPressed || 
+				   keyH.leftPressed || 
+				   keyH.rightPressed;
 		
 		if(keyH.upPressed) {
 			this.movementDirection = Direction.Up;
@@ -107,7 +106,13 @@ public class Player extends Entity {
 		}
 		
 		updateMousePosition();
-		updateMovement();		
+		
+		if(this.inventoryIsOpen) {
+			this.inventory.updateSelectedInventorySlot(keyH);
+		}
+		else {			
+			updateMovement();		
+		}
 	}
 	
 	@Override
