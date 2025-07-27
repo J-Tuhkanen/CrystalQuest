@@ -10,6 +10,7 @@ import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 
 import main.Enum.GameState;
+import object.GameObject;
 
 public class UI {
 	
@@ -70,6 +71,14 @@ public class UI {
 				}
 				else {					
 					drawThemedElement(graphics, slotX, slotY, inventorySlotSize, inventorySlotSize, new Color(186, 175, 159, 230));
+				}
+				GameObject objInSlot = inventory.getItemAt(i, y);
+				if(objInSlot != null) {
+					
+					int imageX = slotX + (inventorySlotSize - objInSlot.image.getWidth()) / 4 ;
+					int imageY = slotY + (inventorySlotSize - objInSlot.image.getHeight()) / 4 ;
+					
+					graphics.drawImage(objInSlot.image, imageX, imageY, gamePanel.tileSize, gamePanel.tileSize, null, gamePanel);
 				}
 			}
 		}

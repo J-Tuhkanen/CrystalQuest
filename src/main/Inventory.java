@@ -62,4 +62,8 @@ public class Inventory {
 			this._lastTimeColumnUpdated = currentTime;
 		}
 	}
+	
+	public GameObject getItemAt(int rowIndex, int columnIndex) {
+		return this.items[rowIndex * 6 + columnIndex];
+	}
 }
