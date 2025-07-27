@@ -48,8 +48,8 @@ public abstract class Npc extends Entity {
 	}
 	
 	@Override
-	protected void checkCollision(boolean canPickupItems) {
-		super.checkCollision(canPickupItems);
+	protected void checkCollision() {
+		super.checkCollision();
 		if(this.collisionOn == false) {
 			this.gp.collisiongChecker.checkPlayerCollision(this);
 		}

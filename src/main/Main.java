@@ -1,26 +1,47 @@
 package main;
 
+
+import java.awt.Dimension;
+
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
+import javax.swing.JPanel;
+import javax.swing.OverlayLayout;
 
 public class Main {
 
 	public static void main(String[] args) {
 		
 		JFrame window = new JFrame();
+		JLayeredPane mainPane = new JLayeredPane();
 		GamePanel gamePanel = new GamePanel();
-		LoadSounds(gamePanel);
+		JPanel uiPanel = new JPanel();
+		var label = new JLabel("Testing label");
+
+		mainPane.setPreferredSize(new Dimension(gamePanel.screenWidth, gamePanel.screenHeight));
+		gamePanel.setBounds(0, 0, gamePanel.screenWidth, gamePanel.screenHeight);
+		
+		uiPanel.add(label);
+		uiPanel.setBounds(0, 0, gamePanel.screenWidth, gamePanel.screenHeight);
+		uiPanel.setOpaque(false);
+		label.setOpaque(false);
 		
 		window.setTitle("CystalQuest");
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		window.add(gamePanel);
+		
+		mainPane.add(gamePanel, Integer.valueOf(0));
+		mainPane.add(uiPanel, Integer.valueOf(1));
+		window.add(mainPane);
+		
 		window.pack();
 		window.setLocationRelativeTo(null);
-		window.setResizable(false);
+		window.setResizable(true);
 		window.setVisible(true);
-
+		
+		LoadSounds(gamePanel);
 		gamePanel.setupGame();
-		gamePanel.startGameThread();
-	
+		gamePanel.startGameThread();	
 	}
 	
 	public static void LoadSounds(GamePanel gamePanel) {

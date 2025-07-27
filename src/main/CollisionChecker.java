@@ -1,11 +1,11 @@
 package main;
 
 import java.awt.Rectangle;
-
+import java.util.ArrayList;
 import entity.Entity;
 import entity.Npc;
-import entity.Player;
 import main.Enum.Direction;
+import object.GameObject;
 import tile.Tile;
 
 public class CollisionChecker {
@@ -100,8 +100,10 @@ public class CollisionChecker {
 	    }	
 	}
 	
-	public void checkObjectCollision(Entity entity, boolean canPickUpItems) {
-						
+	public ArrayList<GameObject> checkObjectCollision(Entity entity, boolean canPickUpItems) {
+		
+		ArrayList<GameObject> collidedObjects = new ArrayList<GameObject>();
+		
 		// Run the check in reverse so we can have a clean loop with a delete within the collection.
 		for (int i = gp.objects.size() - 1; i > -1 ; i--) {
 			
@@ -136,10 +138,13 @@ public class CollisionChecker {
 					entity.collisionOn = true;
 				}
 				else if(canPickUpItems) {
-					((Player)entity).pickUpObject(gameObject);
+					//((Player)entity).pickUpObject(gameObject);
+					collidedObjects.add(gameObject);
 				}
 			}
 		}
+		
+		return collidedObjects;
 	}
 	
 	public void checkEntityCollision(Entity entity) {

@@ -3,11 +3,13 @@ package main;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 
 import javax.imageio.ImageIO;
+import javax.swing.JLabel;
 
 import main.Enum.GameState;
 import object.GameObject;
@@ -17,7 +19,7 @@ public class UI {
 	GamePanel gamePanel;
 	final Font arial_plain_40 = new Font("Arial", Font.PLAIN, 40);
 	BufferedImage inventoryImage;
-		
+	
 	public UI(GamePanel gamePanel) {
 		this.gamePanel = gamePanel;
 		try {
@@ -84,7 +86,16 @@ public class UI {
 		}
 	}
 	
-	private void drawTextOnCenter(String text, Graphics2D graphics) {
+	public void drawActionHint(String text, Graphics2D graphics) {
+
+		int length = (int)graphics.getFontMetrics().getStringBounds(text, graphics).getWidth();
+		
+		graphics.drawString(text, 
+				this.gamePanel.screenWidth / 2 - length / 2,
+				this.gamePanel.screenHeight / 2 + this.gamePanel.screenHeight / 4);
+	}
+	
+	public void drawTextOnCenter(String text, Graphics2D graphics) {
 		
 		int length = (int)graphics.getFontMetrics().getStringBounds(text, graphics).getWidth();
 		

@@ -24,7 +24,7 @@ public class Player extends Entity {
 	public int cameraX, cameraY;
 	public Boolean inventoryIsOpen = false;
 	public Boolean canToggleInventory = true;
-
+	
 	Point mousePosition = MouseInfo.getPointerInfo().getLocation();
 	
 	public Player(GamePanel gp, KeyHandler keyH, MouseHandler mouseH) {
@@ -73,7 +73,7 @@ public class Player extends Entity {
 		}
 		
 		this.UpdateLookDirection(isMoving);		
-		this.checkCollision(true);
+		this.checkCollision();
 		
 		if (isMoving && collisionOn == false) {
 			this.move();

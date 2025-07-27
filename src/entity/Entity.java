@@ -64,13 +64,10 @@ public abstract class Entity  {
 		this.hitBox.height = 32;
 	}
 	
-	protected void checkCollision(boolean canPickupItems) {
+	protected void checkCollision() {
 		
 		this.collisionOn = false;
 		this.gp.collisiongChecker.checkTile(this);		
-				
-		// Check object collision
-		this.gp.collisiongChecker.checkObjectCollision(this, canPickupItems);
 		this.gp.collisiongChecker.checkEntityCollision(this);
 	}
 	

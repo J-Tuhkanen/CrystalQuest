@@ -58,7 +58,7 @@ public class OldManNpc extends Npc {
 	
 	private void updateMovement() {
 		
-		this.checkCollision(false);
+		this.checkCollision();
 		
 		if (collisionOn == false) {
 			this.move();

@@ -113,7 +113,6 @@ public class GamePanel extends JPanel implements Runnable {
 		super.paintComponent(graphics);
 		
 		Graphics2D g = (Graphics2D)graphics;
-		
 		tileManager.draw(g);
 		
 		for(GameObject o : this.objects) {
@@ -127,6 +126,13 @@ public class GamePanel extends JPanel implements Runnable {
 		player.draw(g);
 		ui.draw(g);
 		
+		var items = this.collisiongChecker.checkObjectCollision(player, true);
+		if(items.size() == 1) {
+			ui.drawTextOnCenter("Press E to pick up " + items.get(0).name, g);
+		}
+		else if(items.size() > 0) {
+			ui.drawActionHint("Press E to open pickup menu", g);
+		}
 		g.dispose();
 	}
 	

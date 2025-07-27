@@ -45,6 +45,7 @@ public class TileManager {
 					BufferedImage image = ImageIO.read(getClass().getResourceAsStream(String.format("/tiles/%s.png", tileId)));					
 					BufferedImage scaledImage = new BufferedImage(gamePanel.tileSize, gamePanel.tileSize, image.getType());
 					Graphics2D graphics = scaledImage.createGraphics();
+					
 					graphics.drawImage(image, 0, 0, gamePanel.tileSize, gamePanel.tileSize, null);
 					graphics.dispose();
 					

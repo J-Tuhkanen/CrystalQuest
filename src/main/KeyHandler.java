@@ -8,7 +8,7 @@ import main.Enum.GameState;
 public class KeyHandler implements KeyListener {
 
 	// Pressed
-	public boolean upPressed, downPressed, leftPressed, rightPressed, inventoryPressed;
+	public boolean upPressed, downPressed, leftPressed, rightPressed, inventoryPressed, usePressed;
 	
 	// Released
 	public boolean inventoryReleased = true;
@@ -21,8 +21,7 @@ public class KeyHandler implements KeyListener {
 	}
 	
 	@Override
-	public void keyTyped(KeyEvent e) {
-	
+	public void keyTyped(KeyEvent e) {	
 	}	
 
 	@Override
@@ -54,6 +53,9 @@ public class KeyHandler implements KeyListener {
 
 			this.leftPressed = true;
 		}
+		if(code == KeyEvent.VK_E) {
+			this.usePressed = true;
+		}
 	}
 	
 	@Override
@@ -78,6 +80,9 @@ public class KeyHandler implements KeyListener {
 		if(code == KeyEvent.VK_A) {
 
 			this.leftPressed = false;
+		}
+		if(code == KeyEvent.VK_E) {
+			this.usePressed = false;
 		}
 	}
 }
