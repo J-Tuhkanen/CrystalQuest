@@ -144,6 +144,7 @@ public class GamePanel extends JPanel implements Runnable {
 		sound.stop();
 		sound = null;
 	}
+	
 	public void playSoundEffect(String soundName) {
 		sound = this.sounds.get(soundName);
 		sound.play();		

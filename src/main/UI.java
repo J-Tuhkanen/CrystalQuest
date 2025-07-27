@@ -16,7 +16,7 @@ public class UI {
 	GamePanel gamePanel;
 	final Font arial_plain_40 = new Font("Arial", Font.PLAIN, 40);
 	BufferedImage inventoryImage;
-	
+		
 	public UI(GamePanel gamePanel) {
 		this.gamePanel = gamePanel;
 		try {
@@ -33,17 +33,17 @@ public class UI {
 		graphics.setFont(arial_plain_40);
 		graphics.setColor(Color.white);
 		
+		if(this.gamePanel.player.inventoryIsOpen) {
+			drawInventory(graphics, this.gamePanel.player.inventory);
+		}
 		if(this.gamePanel.gameState == GameState.Paused) {
 			
 			graphics.setFont(graphics.getFont().deriveFont(Font.BOLD, 80));
 			this.drawTextOnCenter("PAUSE", graphics);
 		}
-		else if(this.gamePanel.player.inventoryIsOpen) {
-			drawInventory(graphics);
-		}
 	}
 	
-	public void drawInventory(Graphics2D graphics) {
+	public void drawInventory(Graphics2D graphics, Inventory inventory) {
 		
 		// TODO: Optimize this later with once calculated options when screen size changes
 		int inventoryWidth = this.gamePanel.tileSize * 13;
@@ -58,7 +58,7 @@ public class UI {
 		
 		// Inventory has 12 slots; 2 rows of slots and each row has 6 slots.
 		for(int i = 0; i < 2; i++) {	
-			for(int y = 0; y < 6; y++) {
+			for(int y = 0; y < inventory.items.length / 2; y++) {
 				
 				int slotX = inventoryX + slotMargin + slotMargin * y + inventorySlotSize * y;
 				int slotY = inventoryY + inventoryHeight / 4 + slotMargin + slotMargin * i + inventorySlotSize * i;

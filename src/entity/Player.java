@@ -8,6 +8,7 @@ import java.awt.image.BufferedImage;
 import javax.swing.SwingUtilities;
 
 import main.GamePanel;
+import main.Inventory;
 import main.KeyHandler;
 import main.MouseHandler;
 import main.Enum.Direction;
@@ -18,7 +19,8 @@ public class Player extends Entity {
 	KeyHandler keyH;
 	MouseHandler mouseH;
 	
-	GameObject inventory[] = new GameObject[8];
+	public Inventory inventory = new Inventory();
+	//GameObject inventory[] = new GameObject[8];
 	int spriteCounter = 0;
 	public int cameraX, cameraY;
 	public Boolean inventoryIsOpen = false;
@@ -81,18 +83,15 @@ public class Player extends Entity {
 	}
 	
 	public void pickUpObject(GameObject obj) {
-		
-		for(int i = 0; i < this.inventory.length; i++) {
-						
-			// Find empty inventory slot
-			if (this.inventory[i] == null) {
-				
-				this.inventory[i] = obj;
-				System.out.println("pick up " + obj.name);
-				gp.objects.remove(obj);
-				return;
-			}
+							
+		// Find empty inventory slot
+		if (this.inventory.TryAdd(obj)) {
+			
+			System.out.println("pick up " + obj.name);
+			gp.objects.remove(obj);
+			return;
 		}
+	
 		System.out.println("Inventory is full.");
 	}
 
