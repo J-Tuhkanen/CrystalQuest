@@ -1,6 +1,5 @@
 package main;
 
-
 import java.awt.Dimension;
 
 import javax.swing.JFrame;
@@ -14,13 +13,11 @@ public class Main {
 		JFrame window = new JFrame();
 		JLayeredPane mainPane = new JLayeredPane();
 		GamePanel gamePanel = new GamePanel();
-		JPanel uiPanel = new UIPanel();
+		JPanel uiPanel = new UIPanel(gamePanel);
 
 		mainPane.setPreferredSize(new Dimension(gamePanel.screenWidth, gamePanel.screenHeight));
-		gamePanel.setBounds(0, 0, gamePanel.screenWidth, gamePanel.screenHeight);
-		
 		uiPanel.setBounds(0, 0, gamePanel.screenWidth, gamePanel.screenHeight);
-		uiPanel.setOpaque(false);
+		gamePanel.setBounds(0, 0, gamePanel.screenWidth, gamePanel.screenHeight);
 		
 		window.setTitle("CystalQuest");
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -31,7 +28,7 @@ public class Main {
 		
 		window.pack();
 		window.setLocationRelativeTo(null);
-		window.setResizable(true);
+		window.setResizable(false);
 		window.setVisible(true);
 		
 		LoadSounds(gamePanel);
