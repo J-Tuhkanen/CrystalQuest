@@ -5,11 +5,11 @@ import java.util.Random;
 import main.GamePanel;
 import main.Enum.Direction;
 
-public class OldManNpc extends Npc {
+public class OldManNpc extends Npc implements Interactable {
 
 	public OldManNpc(GamePanel gp) {
 		
-		super(gp, "/npc/oldman");
+		super(false, gp, "/npc/oldman");
 		this.speed = 1;
 	}
 	
@@ -54,6 +54,11 @@ public class OldManNpc extends Npc {
 		if(this.movementDirection != null) {
 			this.updateMovement();
 		}
+	}
+	
+	@Override
+	public void talk(Entity conversationPartner) {
+		
 	}
 	
 	private void updateMovement() {

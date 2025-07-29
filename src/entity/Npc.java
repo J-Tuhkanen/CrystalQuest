@@ -3,13 +3,14 @@ package entity;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
+import main.CollisionInformation;
 import main.GamePanel;
 import main.Enum.Direction;
 
 public abstract class Npc extends Entity {
 
-	public Npc(GamePanel gp, String imagePrefix) {
-		super(gp, imagePrefix);
+	public Npc(boolean canPickupItems, GamePanel gp, String imagePrefix) {
+		super(canPickupItems, gp, imagePrefix);
 	}
 	
 	public abstract void updateAction();
@@ -48,10 +49,12 @@ public abstract class Npc extends Entity {
 	}
 	
 	@Override
-	protected void checkCollision() {
-		super.checkCollision();
+	protected CollisionInformation checkCollision() {
+
+		var collInfo = super.checkCollision();
 		if(this.collisionOn == false) {
 			this.gp.collisiongChecker.checkPlayerCollision(this);
 		}
+		return collInfo;
 	}
 }

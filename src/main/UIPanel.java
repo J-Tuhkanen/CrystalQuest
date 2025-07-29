@@ -32,14 +32,11 @@ public class UIPanel extends JPanel {
 	}
 	
 	private void setupHintLabel() {
-		
-		var y = (int)(this.getHeight() * 0.8);
-		
+				
 		_hintLabel.setBounds(100, 100, this.getWidth(), (int)(this.getHeight() * 0.2));
 		_hintLabel.setLayout(gridLayoutManager);
 		add(_hintLabel);
 		add(_hintLabel);
 		add(_hintLabel);
-		
 	}
 }

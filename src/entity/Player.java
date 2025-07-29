@@ -4,9 +4,9 @@ import java.awt.Graphics2D;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
-
 import javax.swing.SwingUtilities;
 
+import main.CollisionInformation;
 import main.GamePanel;
 import main.Inventory;
 import main.KeyHandler;
@@ -26,9 +26,10 @@ public class Player extends Entity {
 	public Boolean canToggleInventory = true;
 	
 	Point mousePosition = MouseInfo.getPointerInfo().getLocation();
+	public CollisionInformation collisionInformation = null;
 	
 	public Player(GamePanel gp, KeyHandler keyH, MouseHandler mouseH) {
-		super(gp, "/player/boy");
+		super(true, gp, "/player/boy");
 		this.gp = gp;
 		this.keyH = keyH;
 		this.mouseH = mouseH;
@@ -72,9 +73,9 @@ public class Player extends Entity {
 			this.movementDirection = Direction.Right;
 		}
 		
-		this.UpdateLookDirection(isMoving);		
+		this.updateLookDirection(isMoving);		
 		this.checkCollision();
-		
+
 		if (isMoving && collisionOn == false) {
 			this.move();
 			this.updateSprite();
@@ -140,7 +141,7 @@ public class Player extends Entity {
 		g.drawImage(image, cameraX, cameraY, gp.tileSize, gp.tileSize, null);
 	}
 	
-	private void UpdateLookDirection(boolean isMoving) {
+	private void updateLookDirection(boolean isMoving) {
 		
 		if(this.mouseH.RightMouseKeyPressed) {
 			

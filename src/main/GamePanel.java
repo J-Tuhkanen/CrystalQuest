@@ -126,7 +126,7 @@ public class GamePanel extends JPanel implements Runnable {
 		player.draw(g);
 		ui.draw(g);
 		
-		var items = this.collisiongChecker.checkObjectCollision(player, true);
+		var items = this.collisiongChecker.checkObjectCollision(player);
 		if(items.size() == 1) {
 			ui.drawTextOnCenter("Press E to pick up " + items.get(0).name, g);
 		}

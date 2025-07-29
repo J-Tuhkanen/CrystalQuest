@@ -6,12 +6,15 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 
+import main.CollisionInformation;
 import main.GamePanel;
 import main.Enum.Direction;
 
 public abstract class Entity  {
 
 	private int _spriteCounter = 0;
+	public final boolean canPickupItems;
+	
 	protected GamePanel gp;
 	protected int spriteCount = 2;
 	protected int spriteIndex = 0;
@@ -32,14 +35,18 @@ public abstract class Entity  {
 	public BufferedImage[] right = new BufferedImage[this.spriteCount];
 	public BufferedImage[] down = new BufferedImage[this.spriteCount];
 	
-	public Entity(GamePanel gp, String imagePrefix) {
+	public Entity(boolean canPickupItems, GamePanel gp, String imagePrefix) {
+		
+		this.canPickupItems = canPickupItems;
 		this.gp = gp;
 		this.imagePrefix = imagePrefix;
 		loadImages();
 		setupCollision();
 	}
 	
-	public Entity(GamePanel gp, String imagePrefix, int spriteCount) {
+	public Entity(boolean canPickupItems, GamePanel gp, String imagePrefix, int spriteCount) {
+		
+		this.canPickupItems = canPickupItems;
 		this.gp = gp;
 		this.imagePrefix = imagePrefix;
 		this.spriteCount = spriteCount;
@@ -64,11 +71,16 @@ public abstract class Entity  {
 		this.hitBox.height = 32;
 	}
 	
-	protected void checkCollision() {
+	protected CollisionInformation checkCollision() {
 		
 		this.collisionOn = false;
 		this.gp.collisiongChecker.checkTile(this);		
-		this.gp.collisiongChecker.checkEntityCollision(this);
+				
+		// Check object collision
+		var gameObjectCollidedWith = this.gp.collisiongChecker.checkObjectCollision(this);
+		var npcsCollidedWith = this.gp.collisiongChecker.checkEntityCollision(this);
+	
+		return new CollisionInformation(npcsCollidedWith, gameObjectCollidedWith);
 	}
 	
 	protected void move() {

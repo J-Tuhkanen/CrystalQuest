@@ -100,10 +100,10 @@ public class CollisionChecker {
 	    }	
 	}
 	
-	public ArrayList<GameObject> checkObjectCollision(Entity entity, boolean canPickUpItems) {
+	public ArrayList<GameObject> checkObjectCollision(Entity entity) {
 		
 		ArrayList<GameObject> collidedObjects = new ArrayList<GameObject>();
-		
+
 		// Run the check in reverse so we can have a clean loop with a delete within the collection.
 		for (int i = gp.objects.size() - 1; i > -1 ; i--) {
 			
@@ -136,21 +136,20 @@ public class CollisionChecker {
 				if(gameObject.collision) {
 					
 					entity.collisionOn = true;
-				}
-				else if(canPickUpItems) {
-					//((Player)entity).pickUpObject(gameObject);
-					collidedObjects.add(gameObject);
-				}
+				}				
+				collidedObjects.add(gameObject);
 			}
 		}
 		
 		return collidedObjects;
 	}
 	
-	public void checkEntityCollision(Entity entity) {
+	public ArrayList<Npc> checkEntityCollision(Entity entity) {
+		
+		ArrayList<Npc> collidedEntities = new ArrayList<Npc>(); 
 		
 		// Run the check in reverse so we can have a clean loop with a delete within the collection.
-		for (Entity npc : gp.npcs) {
+		for (Npc npc : gp.npcs) {
 			
 			if(npc.equals(entity)) {
 				continue;
@@ -181,9 +180,11 @@ public class CollisionChecker {
 			}
 			
 			if(entitySolidArea.intersects(gameObjectSolidArea)) {
-				entity.collisionOn = true;
+				collidedEntities.add(npc);
 			}
 		}
+		
+		return collidedEntities;
 	}
 	
 	public void checkPlayerCollision(Npc npc) {
