@@ -45,6 +45,8 @@ public class GamePanel extends JPanel implements Runnable {
 	public final ArrayList<Npc> npcs = new ArrayList<>();
 	public GameState gameState;
 	
+	public String actionHintText;
+	
 	public GamePanel() {
 				
 		setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -127,12 +129,14 @@ public class GamePanel extends JPanel implements Runnable {
 		ui.draw(g);
 		
 		var items = this.collisiongChecker.checkObjectCollision(player);
+		actionHintText = null;
 		if(items.size() == 1) {
-			ui.drawTextOnCenter("Press E to pick up " + items.get(0).name, g);
+			actionHintText = "Press E to pick up " + items.get(0).name;
 		}
 		else if(items.size() > 0) {
-			ui.drawActionHint("Press E to open pickup menu", g);
+			actionHintText = "Press E to open pickup menu";
 		}
+		
 		g.dispose();
 	}
 	

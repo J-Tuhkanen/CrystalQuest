@@ -13,10 +13,10 @@ public class Main {
 		JFrame window = new JFrame();
 		JLayeredPane mainPane = new JLayeredPane();
 		GamePanel gamePanel = new GamePanel();
-		JPanel uiPanel = new UIPanel(gamePanel);
+		JPanel uiPanel = new ActionHintPanel(gamePanel);
 
 		mainPane.setPreferredSize(new Dimension(gamePanel.screenWidth, gamePanel.screenHeight));
-		uiPanel.setBounds(0, 0, gamePanel.screenWidth, gamePanel.screenHeight);
+		uiPanel.setBounds(0, (int)(gamePanel.screenHeight * 0.8), gamePanel.screenWidth, (int)(gamePanel.screenHeight * 0.2));
 		gamePanel.setBounds(0, 0, gamePanel.screenWidth, gamePanel.screenHeight);
 		
 		window.setTitle("CystalQuest");

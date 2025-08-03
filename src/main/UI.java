@@ -87,15 +87,6 @@ public class UI {
 		}
 	}
 	
-	public void drawActionHint(String text, Graphics2D graphics) {
-
-		int length = (int)graphics.getFontMetrics().getStringBounds(text, graphics).getWidth();
-		
-		graphics.drawString(text, 
-				this.gamePanel.screenWidth / 2 - length / 2,
-				this.gamePanel.screenHeight / 2 + this.gamePanel.screenHeight / 4);
-	}
-	
 	public void drawDialogScreen(Graphics2D graphics) {
 		
 		int x = this.gamePanel.tileSize * 2;
