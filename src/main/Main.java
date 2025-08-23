@@ -38,7 +38,7 @@ public class Main {
 	
 	public static void LoadSounds(GamePanel gamePanel) {
 		
-		gamePanel.sounds.put("gamemusic", new Sound("/sound/BlueBoyAdventure.wav"));
+		gamePanel.sounds.put("gamemusic", new Sound("/sound/curious-forest.wav"));
 		gamePanel.sounds.put("coin", new Sound("/sound/coin.wav"));
 		gamePanel.sounds.put("powerup", new Sound("/sound/powerup.wav"));
 		gamePanel.sounds.put("unlock", new Sound("/sound/unlock.wav"));

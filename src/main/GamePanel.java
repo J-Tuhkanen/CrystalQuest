@@ -7,12 +7,14 @@ import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.Hashtable;
+import java.util.List;
 
 import javax.swing.JPanel;
 
 import entity.Entity;
 import entity.Npc;
 import entity.Player;
+import main.Enum.GameSounds;
 import main.Enum.GameState;
 import object.GameObject;
 import tile.TileManager;
@@ -44,7 +46,7 @@ public class GamePanel extends JPanel implements Runnable {
 	public final ArrayList<GameObject> objects = new ArrayList<>();
 	public final ArrayList<Npc> npcs = new ArrayList<>();
 	public GameState gameState;
-	
+	public List<GameObject> items = new ArrayList<GameObject>();
 	public String actionHintText;
 	
 	public GamePanel() {
@@ -128,13 +130,15 @@ public class GamePanel extends JPanel implements Runnable {
 		player.draw(g);
 		ui.draw(g);
 		
-		var items = this.collisiongChecker.checkObjectCollision(player);
+		items = this.collisiongChecker.checkObjectCollision(player);
 		actionHintText = null;
 		if(items.size() == 1) {
-			actionHintText = "Press E to pick up " + items.get(0).name;
+
+			var item = items.get(0);
+			actionHintText = "Press E to " + item.actionInformation.type.toString().toLowerCase() + " " + item.name;
 		}
 		else if(items.size() > 0) {
-			actionHintText = "Press E to open pickup menu";
+			actionHintText = "Press E to open action menu";
 		}
 		
 		g.dispose();

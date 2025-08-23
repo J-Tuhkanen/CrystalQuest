@@ -12,7 +12,7 @@ public class Sound {
 	
 	public Sound(String resoursePath) {
 		_soundUrl = getClass().getResource(resoursePath);
-		
+
 		try {			
 			_clip = AudioSystem.getClip();
 			_clip.open(AudioSystem.getAudioInputStream(_soundUrl));

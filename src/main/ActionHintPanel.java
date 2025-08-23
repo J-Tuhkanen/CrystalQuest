@@ -13,7 +13,7 @@ public class ActionHintPanel extends JPanel {
 
 	private static final long serialVersionUID = 6302459241288572245L;
 
-	private final JLabel _hintLabel = new JLabel("terve");
+	private final JLabel _hintLabel = new JLabel();
 	private final GamePanel _gamePanel;
 	
 	public ActionHintPanel(GamePanel gamePanel) {		
@@ -23,15 +23,11 @@ public class ActionHintPanel extends JPanel {
 		this.setLayout(new FlowLayout());		
 	}
 
-	public void paintComponent(Graphics graphics) {
+	public void paintComponent(Graphics graphics) {		
 		super.paintComponent(graphics);
-		this.writeHint(this._gamePanel.actionHintText);
+		_hintLabel.setText(this._gamePanel.actionHintText);
 	}
 
-	public void writeHint(String text) {
-		_hintLabel.setText(text);
-	}
-	
 	private void setupHintLabel() {
 		_hintLabel.setBounds(0, 0, this._gamePanel.screenWidth, 100);
 		_hintLabel.setHorizontalAlignment(SwingConstants.CENTER);
