@@ -11,20 +11,20 @@ public class Main {
 	public static void main(String[] args) {
 		
 		JFrame window = new JFrame();
-		JLayeredPane mainPane = new JLayeredPane();
+		JLayeredPane containerPanel = new JLayeredPane();
 		GamePanel gamePanel = new GamePanel();
-		JPanel uiPanel = new ActionHintPanel(gamePanel);
+		JPanel uiPanel = new UIPanel(gamePanel);
 
-		mainPane.setPreferredSize(new Dimension(gamePanel.screenWidth, gamePanel.screenHeight));
+		containerPanel.setPreferredSize(new Dimension(gamePanel.screenWidth, gamePanel.screenHeight));
 		uiPanel.setBounds(0, (int)(gamePanel.screenHeight * 0.8), gamePanel.screenWidth, (int)(gamePanel.screenHeight * 0.2));
 		gamePanel.setBounds(0, 0, gamePanel.screenWidth, gamePanel.screenHeight);
 		
 		window.setTitle("CystalQuest");
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		mainPane.add(gamePanel, Integer.valueOf(0));
-		mainPane.add(uiPanel, Integer.valueOf(1));
-		window.add(mainPane);
+		containerPanel.add(gamePanel, Integer.valueOf(0));
+		containerPanel.add(uiPanel, Integer.valueOf(1));
+		window.add(containerPanel);
 		
 		window.pack();
 		window.setLocationRelativeTo(null);
