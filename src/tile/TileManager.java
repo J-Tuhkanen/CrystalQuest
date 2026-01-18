@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 
 import entity.Player;
-import main.GamePanel;
+import ui.GamePanel;
 
 public class TileManager {
 

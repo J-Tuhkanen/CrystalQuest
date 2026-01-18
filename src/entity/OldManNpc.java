@@ -2,8 +2,8 @@ package entity;
 
 import java.util.Random;
 
-import main.GamePanel;
 import main.Enum.Direction;
+import ui.GamePanel;
 
 public class OldManNpc extends Npc implements Interactable {
 

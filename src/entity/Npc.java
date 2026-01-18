@@ -4,8 +4,8 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 import main.CollisionInformation;
-import main.GamePanel;
 import main.Enum.Direction;
+import ui.GamePanel;
 
 public abstract class Npc extends Entity {
 

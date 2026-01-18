@@ -4,6 +4,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import main.Enum.GameState;
+import ui.GamePanel;
 
 public class MouseHandler extends MouseAdapter  {
 

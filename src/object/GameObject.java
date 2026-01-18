@@ -4,8 +4,8 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
-import main.GamePanel;
 import main.ActionInformation.ActionInformation;
+import ui.GamePanel;
 
 public abstract class GameObject {
 

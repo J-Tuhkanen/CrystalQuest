@@ -4,6 +4,7 @@ import entity.OldManNpc;
 import object.Key;
 import object.TreasureChest;
 import object.WoodenDoor;
+import ui.GamePanel;
 
 public class GameObjectManager {
 

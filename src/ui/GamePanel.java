@@ -1,4 +1,4 @@
-package main;
+package ui;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -14,7 +14,12 @@ import javax.swing.JPanel;
 import entity.Entity;
 import entity.Npc;
 import entity.Player;
-import main.Enum.GameSounds;
+import main.CollisionChecker;
+import main.GameObjectManager;
+import main.KeyHandler;
+import main.MouseHandler;
+import main.Sound;
+import main.UI;
 import main.Enum.GameState;
 import object.GameObject;
 import tile.TileManager;
@@ -128,7 +133,6 @@ public class GamePanel extends JPanel implements Runnable {
 		}
 		
 		player.draw(g);
-		ui.draw(g);
 		
 		items = this.collisiongChecker.checkObjectCollision(player);
 		actionHintText = null;

@@ -7,8 +7,8 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import main.CollisionInformation;
-import main.GamePanel;
 import main.Enum.Direction;
+import ui.GamePanel;
 
 public abstract class Entity  {
 

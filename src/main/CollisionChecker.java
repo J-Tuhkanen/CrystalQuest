@@ -7,6 +7,7 @@ import entity.Npc;
 import main.Enum.Direction;
 import object.GameObject;
 import tile.Tile;
+import ui.GamePanel;
 
 public class CollisionChecker {
 

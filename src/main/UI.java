@@ -1,16 +1,14 @@
 package main;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
-import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 
 import javax.imageio.ImageIO;
 
 import main.Enum.GameState;
-import object.GameObject;
+import ui.GamePanel;
 
 public class UI {
 	

@@ -6,6 +6,9 @@ import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 
+import ui.GamePanel;
+import ui.UIPanel;
+
 public class Main {
 
 	public static void main(String[] args) {
@@ -13,10 +16,10 @@ public class Main {
 		JFrame window = new JFrame();
 		JLayeredPane containerPanel = new JLayeredPane();
 		GamePanel gamePanel = new GamePanel();
-		JPanel uiPanel = new UIPanel(gamePanel);
+		UIPanel uiPanel = new UIPanel(gamePanel);
 
 		containerPanel.setPreferredSize(new Dimension(gamePanel.screenWidth, gamePanel.screenHeight));
-		uiPanel.setBounds(0, (int)(gamePanel.screenHeight * 0.8), gamePanel.screenWidth, (int)(gamePanel.screenHeight * 0.2));
+		uiPanel.setBounds(0, 0, gamePanel.screenWidth, gamePanel.screenHeight);		
 		gamePanel.setBounds(0, 0, gamePanel.screenWidth, gamePanel.screenHeight);
 		
 		window.setTitle("CystalQuest");

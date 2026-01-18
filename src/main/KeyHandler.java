@@ -4,6 +4,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import main.Enum.GameState;
+import ui.GamePanel;
 
 public class KeyHandler implements KeyListener {
 

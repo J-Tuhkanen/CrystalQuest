@@ -1,49 +1,45 @@
-package main;
+package ui;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.FlowLayout;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
 
-import javax.swing.JLabel;
+import javax.imageio.ImageIO;
 import javax.swing.JPanel;
-import javax.swing.SwingConstants;
 
 import main.Enum.GameState;
 import object.GameObject;
 
-public class UIPanel extends JPanel {
+public class Inventory extends JPanel {
 
-	private static final long serialVersionUID = 6302459241288572245L;
-
-	private final JLabel _hintLabel = new JLabel();
+	private static final long serialVersionUID = 2865297731120918515L;
+	BufferedImage inventoryImage;
 	private final GamePanel _gamePanel;
 	
-	public UIPanel(GamePanel gamePanel) {		
-		_gamePanel = gamePanel;
-
-		_hintLabel.setBounds(0, 0, this._gamePanel.screenWidth, 100);
-		_hintLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		_hintLabel.setForeground(new Color(227, 217, 209));
-		_hintLabel.setFont(new Font("Ariel", 0, 35));
-		this.add(_hintLabel);
+	public Inventory(GamePanel gp) {
 		
-		this.setOpaque(false);
-		this.setLayout(new FlowLayout());		
-	}
-
-	public void paintComponent(Graphics graphics) {		
-		super.paintComponent(graphics);
-		_hintLabel.setText(this._gamePanel.actionHintText);
-		
-		if(this._gamePanel.player.inventoryIsOpen) {
-			this.drawInventory(graphics);
+		this._gamePanel = gp;
+		try {
+			// Load images here
+			inventoryImage = ImageIO.read(getClass().getResourceAsStream("/ui/inventory.png")); 
 		}
-		if(this._gamePanel.gameState == GameState.Paused) {
-			this.drawGameMenu(graphics);
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public void paintComponent(Graphics graphics) {
+		
+		boolean inventoryIsOpenAndGameIsRunning = 
+				this._gamePanel.player.inventoryIsOpen && 
+				this._gamePanel.gameState == GameState.Running;
+		
+		if(inventoryIsOpenAndGameIsRunning) {
+			this.drawInventory(graphics);
 		}
 	}
 	
@@ -88,10 +84,8 @@ public class UIPanel extends JPanel {
 		// TODO: Optimize this later with once calculated options when screen size changes
 		int inventoryWidth = this._gamePanel.tileSize * 13;
 		int inventoryHeight = this._gamePanel.tileSize * 8;
-		int inventoryX = (this._gamePanel.screenWidth - inventoryWidth) / 2 ;
-		int inventoryY = (this._gamePanel.screenHeight - inventoryHeight) / 2 ;
 		
-		drawThemedElement(graphics, inventoryX, inventoryY, inventoryWidth, inventoryHeight);
+		drawThemedElement(graphics, 0, 0, inventoryWidth, inventoryHeight);
 		
 		int inventorySlotSize = inventoryWidth / 7;
 		int slotMargin = (inventoryWidth - inventorySlotSize * 6) / 7;
@@ -100,8 +94,8 @@ public class UIPanel extends JPanel {
 		for(int i = 0; i < 2; i++) {	
 			for(int y = 0; y < _gamePanel.player.inventory.items.length / 2; y++) {
 				
-				int slotX = inventoryX + slotMargin + slotMargin * y + inventorySlotSize * y;
-				int slotY = inventoryY + inventoryHeight / 4 + slotMargin + slotMargin * i + inventorySlotSize * i;
+				int slotX = slotMargin + slotMargin * y + inventorySlotSize * y;
+				int slotY = inventoryHeight / 4 + slotMargin + slotMargin * i + inventorySlotSize * i;
 				
 				boolean isSelectedSlot = _gamePanel.player.inventory.selectedRowIndex == i && _gamePanel.player.inventory.selectedColumnIndex == y;
 				
@@ -123,9 +117,4 @@ public class UIPanel extends JPanel {
 		}
 	}
 	
-
-	
-	private void drawGameMenu(Graphics graphics) {
-		this._hintLabel.setText("Draw game menu here");
-	}
 }

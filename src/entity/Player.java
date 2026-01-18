@@ -7,12 +7,12 @@ import java.awt.image.BufferedImage;
 import javax.swing.SwingUtilities;
 
 import main.CollisionInformation;
-import main.GamePanel;
 import main.Inventory;
 import main.KeyHandler;
 import main.MouseHandler;
 import main.Enum.Direction;
 import object.GameObject;
+import ui.GamePanel;
 
 public class Player extends Entity {
 	
