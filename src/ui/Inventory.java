@@ -115,6 +115,5 @@ public class Inventory extends JPanel {
 				}
 			}
 		}
-	}
-	
+	}	
 }

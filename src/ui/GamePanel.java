@@ -19,7 +19,6 @@ import main.GameObjectManager;
 import main.KeyHandler;
 import main.MouseHandler;
 import main.Sound;
-import main.UI;
 import main.Enum.GameState;
 import object.GameObject;
 import tile.TileManager;
@@ -41,7 +40,6 @@ public class GamePanel extends JPanel implements Runnable {
 	public final int screenHeight = tileSize * maxScreenRows;
 	public final CollisionChecker collisiongChecker;
 	public final TileManager tileManager = new TileManager(this, 10);
-	public final UI ui = new UI(this);
 	
 	public Dictionary<String, Sound> sounds = new Hashtable<>();
 	Sound sound;

@@ -22,7 +22,7 @@ public class Hint extends JPanel {
 		this.setOpaque(false);
 	}
 
-	public void paintComponent(Graphics graphics) {		
+	public void paintComponent(Graphics graphics) {
 		super.paintComponent(graphics);
 		_hintLabel.setText(this._gamePanel.actionHintText);
 	}
