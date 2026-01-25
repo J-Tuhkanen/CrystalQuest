@@ -4,13 +4,18 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import main.ActionInformation.ActionInformation;
-import main.ActionInformation.ActionType;
+import entity.Action;
+import entity.Interactable;
 
-public class WoodenDoor extends GameObject {
+public class WoodenDoor extends GameObject implements Interactable {
 
-	public WoodenDoor() {		
-		super(new ActionInformation(ActionType.Open));
+	private Action[] _actions = new Action[] { 
+		Action.Use, 
+		Action.Examine 
+	};
+	
+	public WoodenDoor() {
+				
 		this.name = "Door";
 		this.collision = true;
 		try {
@@ -20,5 +25,10 @@ public class WoodenDoor extends GameObject {
 		catch(IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public Action[] getActions() {
+		return this._actions;
 	}
 }

@@ -108,7 +108,8 @@ public class CollisionChecker {
 		// Run the check in reverse so we can have a clean loop with a delete within the collection.
 		for (int i = gp.objects.size() - 1; i > -1 ; i--) {
 			
-			var gameObject = gp.objects.get(i);			
+			var gameObject = gp.objects.get(i);
+			
 			var entitySolidArea = new Rectangle(entity.hitBox);
 			var gameObjectSolidArea = new Rectangle(gameObject.solidArea);
 			

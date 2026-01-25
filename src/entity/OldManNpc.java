@@ -7,6 +7,11 @@ import ui.GamePanel;
 
 public class OldManNpc extends Npc implements Interactable {
 
+	private Action[] _actions = new Action[] {
+		Action.Talk,
+		Action.Examine
+	};
+	
 	public OldManNpc(GamePanel gp) {
 		
 		super(false, gp, "/npc/oldman");
@@ -56,10 +61,6 @@ public class OldManNpc extends Npc implements Interactable {
 		}
 	}
 	
-	@Override
-	public void talk(Entity conversationPartner) {
-		
-	}
 	
 	private void updateMovement() {
 		
@@ -73,5 +74,10 @@ public class OldManNpc extends Npc implements Interactable {
 		}
 		
 		this.updateSprite();
+	}
+
+	@Override
+	public Action[] getActions() {
+		return this._actions;
 	}
 }

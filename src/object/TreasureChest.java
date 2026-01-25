@@ -4,13 +4,18 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import main.ActionInformation.ActionInformation;
-import main.ActionInformation.ActionType;
+import entity.Action;
+import entity.Interactable;
 
-public class TreasureChest extends GameObject {
+public class TreasureChest extends GameObject implements Interactable {
+
+	private Action[] _actions = new Action[] { 
+		Action.Use, 
+		Action.Examine 
+	};
 
 	public TreasureChest() {
-		super(new ActionInformation(ActionType.Open));
+		
 		this.name = "Treasure chest";
 		try {
 			
@@ -19,5 +24,10 @@ public class TreasureChest extends GameObject {
 		catch(IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public Action[] getActions() {
+		return this._actions;
 	}
 }

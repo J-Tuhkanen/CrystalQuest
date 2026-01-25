@@ -4,13 +4,18 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import main.ActionInformation.ActionInformation;
-import main.ActionInformation.ActionType;
+import entity.Action;
+import entity.Interactable;
 
-public class Key extends GameObject {
-		
+public class Key extends GameObject implements Interactable {
+	
+	private Action[] _actions = new Action[] { 
+		Action.Pickup, 
+		Action.Examine 
+	};
+	
 	public Key() {
-		super(new ActionInformation(ActionType.Pickup));
+		
 		this.name = "Key";		
 		try {
 			
@@ -19,5 +24,10 @@ public class Key extends GameObject {
 		catch(IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public Action[] getActions() {
+		return this._actions;
 	}
 }

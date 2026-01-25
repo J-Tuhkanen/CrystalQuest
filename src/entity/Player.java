@@ -4,6 +4,8 @@ import java.awt.Graphics2D;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+
 import javax.swing.SwingUtilities;
 
 import main.CollisionInformation;
@@ -26,7 +28,7 @@ public class Player extends Entity {
 	public Boolean canToggleInventory = true;
 	
 	Point mousePosition = MouseInfo.getPointerInfo().getLocation();
-	public CollisionInformation collisionInformation = null;
+	ArrayList<Interactable> interactables = new ArrayList<Interactable>();
 	
 	public Player(GamePanel gp, KeyHandler keyH, MouseHandler mouseH) {
 		super(true, gp, "/player/boy");
@@ -74,8 +76,22 @@ public class Player extends Entity {
 		}
 		
 		this.updateLookDirection(isMoving);		
-		this.checkCollision();
+		var colInfo = this.checkCollision();
 
+		
+		// TODO: This might be a bottle neck due to constant casting. Maybe we should implement instance ID 
+		// and then that as a key return interactables inside a dictionary.
+		// The key could be checked if it already is contained in dict to avoid casting it again.
+		this.interactables = new ArrayList<Interactable>();
+		for(GameObject o : colInfo._gameObjects) {			
+			if(o instanceof Interactable)
+				interactables.add((Interactable)o);
+		}
+		for(Npc npc : colInfo._npcs) {			
+			if(npc instanceof Interactable)
+				interactables.add((Interactable)npc);
+		}
+		
 		if (isMoving && collisionOn == false) {
 			this.move();
 			this.updateSprite();
