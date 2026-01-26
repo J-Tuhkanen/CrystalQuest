@@ -6,23 +6,21 @@ public class UIPanel extends JLayeredPane {
 	
 	private static final long serialVersionUID = 6302459241288572245L;
 	
-	private final Dialog _dialog;
-	private final Hint _hint;
-	private final Menu _menu;
-	private final Inventory _inventory;
+	private final DialogPanel _dialog;
+	private final ActionPanel _hint;
+	private final InventoryPanel _inventory;
 	
 	public UIPanel(GamePanel gp) {
 		
-		_dialog = new Dialog(gp);
-		_hint = new Hint(gp);
-		_menu = new Menu(gp);
-		_inventory = new Inventory(gp);
+		_dialog = new DialogPanel(gp);
+		_hint = new ActionPanel(gp);
+		_inventory = new InventoryPanel(gp);
 		
 		this._hint.setBounds(
 				0, 
-				(int)(gp.screenHeight * 0.8), 
+				0,
 				gp.screenWidth, 
-				(int)(gp.screenHeight * 0.2));
+				gp.screenHeight);
 		
 		int inventoryWidth = gp.tileSize * 13;
 		int inventoryHeight = gp.tileSize * 8;
@@ -39,6 +37,5 @@ public class UIPanel extends JLayeredPane {
 		this.add(this._inventory, 0);		
 		this.add(this._hint, 1);
 		this.add(this._dialog, 2);
-		this.add(this._menu, 3);
 	}
 }

@@ -5,7 +5,7 @@ import java.util.Random;
 import main.Enum.Direction;
 import ui.GamePanel;
 
-public class OldManNpc extends Npc implements Interactable {
+public class OldManNpc extends Npc {
 
 	private Action[] _actions = new Action[] {
 		Action.Talk,
@@ -76,7 +76,6 @@ public class OldManNpc extends Npc implements Interactable {
 		this.updateSprite();
 	}
 
-	@Override
 	public Action[] getActions() {
 		return this._actions;
 	}

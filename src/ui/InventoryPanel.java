@@ -13,13 +13,13 @@ import javax.swing.JPanel;
 import main.Enum.GameState;
 import object.GameObject;
 
-public class Inventory extends JPanel {
+public class InventoryPanel extends JPanel {
 
 	private static final long serialVersionUID = 2865297731120918515L;
 	BufferedImage inventoryImage;
 	private final GamePanel _gamePanel;
 	
-	public Inventory(GamePanel gp) {
+	public InventoryPanel(GamePanel gp) {
 		
 		this._gamePanel = gp;
 		try {

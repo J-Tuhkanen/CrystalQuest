@@ -13,6 +13,7 @@ public class KeyHandler implements KeyListener {
 	
 	// Released
 	public boolean inventoryReleased = true;
+	public boolean useReleased = true;
 
 	private GamePanel gamePanel;
 	
@@ -54,8 +55,9 @@ public class KeyHandler implements KeyListener {
 
 			this.leftPressed = true;
 		}
-		if(code == KeyEvent.VK_E) {
+		if(code == KeyEvent.VK_E && this.useReleased) {
 			this.usePressed = true;
+			this.useReleased = false;
 		}
 	}
 	
@@ -64,8 +66,8 @@ public class KeyHandler implements KeyListener {
 		int code = e.getKeyCode();
 		
 		if(code == KeyEvent.VK_I) {
-			inventoryPressed = false;
-			inventoryReleased = true;
+			this.inventoryPressed = false;
+			this.inventoryReleased = true;
 		}
 		if(code == KeyEvent.VK_W) {
 			this.upPressed = false;
@@ -84,6 +86,7 @@ public class KeyHandler implements KeyListener {
 		}
 		if(code == KeyEvent.VK_E) {
 			this.usePressed = false;
+			this.useReleased = true;
 		}
 	}
 }

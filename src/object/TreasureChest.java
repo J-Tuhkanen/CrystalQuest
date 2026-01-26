@@ -5,9 +5,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import entity.Action;
-import entity.Interactable;
-
-public class TreasureChest extends GameObject implements Interactable {
+public class TreasureChest extends GameObject {
 
 	private Action[] _actions = new Action[] { 
 		Action.Use, 

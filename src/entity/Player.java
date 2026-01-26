@@ -26,9 +26,10 @@ public class Player extends Entity {
 	public int cameraX, cameraY;
 	public Boolean inventoryIsOpen = false;
 	public Boolean canToggleInventory = true;
+	public Boolean actionMenuOpen = false;
 	
 	Point mousePosition = MouseInfo.getPointerInfo().getLocation();
-	ArrayList<Interactable> interactables = new ArrayList<Interactable>();
+	public CollisionInformation collisionInfo = new CollisionInformation(new ArrayList<Npc>(), new ArrayList<GameObject>());
 	
 	public Player(GamePanel gp, KeyHandler keyH, MouseHandler mouseH) {
 		super(true, gp, "/player/boy");
@@ -76,21 +77,7 @@ public class Player extends Entity {
 		}
 		
 		this.updateLookDirection(isMoving);		
-		var colInfo = this.checkCollision();
-
-		
-		// TODO: This might be a bottle neck due to constant casting. Maybe we should implement instance ID 
-		// and then that as a key return interactables inside a dictionary.
-		// The key could be checked if it already is contained in dict to avoid casting it again.
-		this.interactables = new ArrayList<Interactable>();
-		for(GameObject o : colInfo._gameObjects) {			
-			if(o instanceof Interactable)
-				interactables.add((Interactable)o);
-		}
-		for(Npc npc : colInfo._npcs) {			
-			if(npc instanceof Interactable)
-				interactables.add((Interactable)npc);
-		}
+		this.collisionInfo = this.checkCollision();
 		
 		if (isMoving && collisionOn == false) {
 			this.move();
@@ -120,6 +107,13 @@ public class Player extends Entity {
 		}
 		else if(keyH.inventoryReleased) {
 			canToggleInventory = true;
+		}
+		
+		if(keyH.usePressed && (this.collisionInfo.npcs.size() > 0 || this.collisionInfo.gameObjects.size() > 0)) {
+			this.actionMenuOpen = true;
+		}
+		else if ((this.collisionInfo.npcs.size() < 1 && this.collisionInfo.gameObjects.size() < 1) || keyH.useReleased) {
+			this.actionMenuOpen = false;
 		}
 		
 		updateMousePosition();

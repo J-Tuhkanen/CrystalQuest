@@ -4,6 +4,7 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
+import entity.Action;
 import ui.GamePanel;
 
 public abstract class GameObject {
@@ -13,7 +14,7 @@ public abstract class GameObject {
 	public boolean collision = false;
 	public int worldX, worldY;
 	public Rectangle solidArea = new Rectangle(0,0,48,48);
-	
+
 	public void draw(Graphics2D graphics, GamePanel gp) {
 		
 		if (worldX + gp.tileSize > gp.player.worldX - gp.player.cameraX &&
@@ -26,5 +27,9 @@ public abstract class GameObject {
 			
 			graphics.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
 		}		
+	}
+	
+	public Action[] getActions() {
+		return new Action[0];
 	}
 }

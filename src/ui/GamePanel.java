@@ -50,7 +50,6 @@ public class GamePanel extends JPanel implements Runnable {
 	public final ArrayList<Npc> npcs = new ArrayList<>();
 	public GameState gameState;
 	public List<GameObject> items = new ArrayList<GameObject>();
-	public String actionHintText;
 	
 	public GamePanel() {
 				
@@ -131,17 +130,6 @@ public class GamePanel extends JPanel implements Runnable {
 		}
 		
 		player.draw(g);
-		
-		items = this.collisiongChecker.checkObjectCollision(player);
-		actionHintText = null;
-		if(items.size() == 1) {
-
-			var item = items.get(0);
-			actionHintText = "Press E to " + item.actionInformation.type.toString().toLowerCase() + " " + item.name;
-		}
-		else if(items.size() > 0) {
-			actionHintText = "Press E to open action menu";
-		}
 		
 		g.dispose();
 	}

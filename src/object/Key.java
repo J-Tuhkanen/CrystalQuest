@@ -5,9 +5,8 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import entity.Action;
-import entity.Interactable;
 
-public class Key extends GameObject implements Interactable {
+public class Key extends GameObject {
 	
 	private Action[] _actions = new Action[] { 
 		Action.Pickup, 

@@ -10,12 +10,12 @@ import javax.swing.JPanel;
 
 import main.Enum.GameState;
 
-public class Dialog extends JPanel {
+public class DialogPanel extends JPanel {
 
 	private static final long serialVersionUID = -3208584015001474129L;
 	private final GamePanel _gamePanel;
 	
-	public Dialog(GamePanel gp) {
+	public DialogPanel(GamePanel gp) {
 		this._gamePanel = gp;
 		this.setOpaque(false);
 	}
@@ -27,9 +27,8 @@ public class Dialog extends JPanel {
 			this.drawDialog(graphics);		
 	}
 	
-	public void drawDialog(Graphics graphics) {
-		
-		//this.drawThemedElement((Graphics2D)graphics, 0,0, this.getWidth(), this.getHeight(), new Color(0,0,0));
+	public void drawDialog(Graphics graphics) {		
+		this.drawThemedElement((Graphics2D)graphics, 0,0, this.getWidth(), this.getHeight(), new Color(0,0,0));
 	}
 	
 	public int getWidth() {
