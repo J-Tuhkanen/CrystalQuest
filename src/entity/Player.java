@@ -5,6 +5,8 @@ import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Dictionary;
+import java.util.Hashtable;
 
 import javax.swing.SwingUtilities;
 
@@ -22,14 +24,20 @@ public class Player extends Entity {
 	MouseHandler mouseH;
 	
 	public Inventory inventory = new Inventory();
+	// public ActionMenu am = new()
+	int actionIndexUpper = 0;
+	int actionIndexDetailed = 0;
+	
 	int spriteCounter = 0;
 	public int cameraX, cameraY;
 	public Boolean inventoryIsOpen = false;
 	public Boolean canToggleInventory = true;
 	public Boolean actionMenuOpen = false;
+	public Boolean canToggleActionMenu = true;
 	
 	Point mousePosition = MouseInfo.getPointerInfo().getLocation();
 	public CollisionInformation collisionInfo = new CollisionInformation(new ArrayList<Npc>(), new ArrayList<GameObject>());
+	public Dictionary<String, Action[]> actionDict = new Hashtable<>();
 	
 	public Player(GamePanel gp, KeyHandler keyH, MouseHandler mouseH) {
 		super(true, gp, "/player/boy");
@@ -78,11 +86,19 @@ public class Player extends Entity {
 		
 		this.updateLookDirection(isMoving);		
 		this.collisionInfo = this.checkCollision();
+		this.actionDict = this.collisionInfo.getAsActions();
 		
 		if (isMoving && collisionOn == false) {
 			this.move();
 			this.updateSprite();
 		}		
+	}
+	
+	public void updateActionMenuMovement() {
+		
+		if(keyH.downPressed) {
+			
+		}
 	}
 	
 	public void pickUpObject(GameObject obj) {
@@ -109,10 +125,18 @@ public class Player extends Entity {
 			canToggleInventory = true;
 		}
 		
-		if(keyH.usePressed && (this.collisionInfo.npcs.size() > 0 || this.collisionInfo.gameObjects.size() > 0)) {
+		if(this.canToggleActionMenu && keyH.usePressed && (this.collisionInfo.npcs.size() > 0 || this.collisionInfo.gameObjects.size() > 0)) {
+			
+			if(this.actionMenuOpen) {				
+				this.pickUpObject(this.collisionInfo.gameObjects.get(actionIndexDetailed));
+			}
+			this.canToggleActionMenu = false;
 			this.actionMenuOpen = true;
 		}
-		else if ((this.collisionInfo.npcs.size() < 1 && this.collisionInfo.gameObjects.size() < 1) || keyH.useReleased) {
+		else if(keyH.useReleased) {
+			this.canToggleActionMenu = true;
+		}
+		else if ((this.collisionInfo.npcs.size() < 1 && this.collisionInfo.gameObjects.size() < 1)) {
 			this.actionMenuOpen = false;
 		}
 		
@@ -120,6 +144,9 @@ public class Player extends Entity {
 		
 		if(this.inventoryIsOpen) {
 			this.inventory.updateSelectedInventorySlot(keyH);
+		}
+		if(this.actionMenuOpen) {
+			
 		}
 		else {			
 			updateMovement();		

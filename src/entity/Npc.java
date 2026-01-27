@@ -9,8 +9,13 @@ import ui.GamePanel;
 
 public abstract class Npc extends Entity {
 
-	public Npc(boolean canPickupItems, GamePanel gp, String imagePrefix) {
+	private Action[] _actions;
+	private String _name;
+	
+	public Npc(GamePanel gp, String name, Action[] actions, boolean canPickupItems, String imagePrefix) {
 		super(canPickupItems, gp, imagePrefix);
+		this._name = name;
+		this._actions = actions;
 	}
 	
 	public abstract void updateAction();
@@ -48,6 +53,14 @@ public abstract class Npc extends Entity {
 		}	
 	}
 	
+	public Action[] getActions() {
+		return this._actions;
+	}
+	
+	public String getName() {
+		return this._name;
+	}
+
 	@Override
 	protected CollisionInformation checkCollision() {
 
@@ -57,4 +70,5 @@ public abstract class Npc extends Entity {
 		}
 		return collInfo;
 	}
+	
 }

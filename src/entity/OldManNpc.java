@@ -6,15 +6,9 @@ import main.Enum.Direction;
 import ui.GamePanel;
 
 public class OldManNpc extends Npc {
-
-	private Action[] _actions = new Action[] {
-		Action.Talk,
-		Action.Examine
-	};
 	
-	public OldManNpc(GamePanel gp) {
-		
-		super(false, gp, "/npc/oldman");
+	public OldManNpc(GamePanel gp) {		
+		super(gp, "Old man", new Action[] { Action.Talk, Action.Examine }, false, "/npc/oldman");
 		this.speed = 1;
 	}
 	
@@ -74,9 +68,5 @@ public class OldManNpc extends Npc {
 		}
 		
 		this.updateSprite();
-	}
-
-	public Action[] getActions() {
-		return this._actions;
 	}
 }

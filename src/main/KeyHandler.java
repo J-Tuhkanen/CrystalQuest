@@ -9,7 +9,7 @@ import ui.GamePanel;
 public class KeyHandler implements KeyListener {
 
 	// Pressed
-	public boolean upPressed, downPressed, leftPressed, rightPressed, inventoryPressed, usePressed;
+	public boolean upPressed, downPressed, leftPressed, rightPressed, inventoryPressed, usePressed, escapePressed;
 	
 	// Released
 	public boolean inventoryReleased = true;
@@ -32,9 +32,15 @@ public class KeyHandler implements KeyListener {
 		int code = e.getKeyCode();
 		
 		if(code == KeyEvent.VK_ESCAPE) {
-			this.gamePanel.gameState = this.gamePanel.gameState == GameState.Paused 
-				? GameState.Running 
-				: GameState.Paused;
+			
+			if(this.gamePanel.player.actionMenuOpen) {
+				this.gamePanel.player.actionMenuOpen = false;
+			}
+			else {
+				this.gamePanel.gameState = this.gamePanel.gameState == GameState.Paused 
+					? GameState.Running 
+					: GameState.Paused;
+			}
 		}
 		if(code == KeyEvent.VK_I && inventoryReleased) {			
 			inventoryPressed = true;
