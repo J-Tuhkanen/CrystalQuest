@@ -104,10 +104,9 @@ public class Player extends Entity {
 	public void pickUpObject(GameObject obj) {
 							
 		// Find empty inventory slot
-		if (this.inventory.TryAdd(obj)) {
+		if (this.inventory.TryAdd(obj) && gp.objects.remove(obj)) {
 			
 			System.out.println("pick up " + obj.name);
-			gp.objects.remove(obj);
 			return;
 		}
 	
@@ -131,7 +130,7 @@ public class Player extends Entity {
 				this.pickUpObject(this.collisionInfo.gameObjects.get(actionIndexDetailed));
 			}
 			this.canToggleActionMenu = false;
-			this.actionMenuOpen = true;
+			this.actionMenuOpen = !this.actionMenuOpen;
 		}
 		else if(keyH.useReleased) {
 			this.canToggleActionMenu = true;
