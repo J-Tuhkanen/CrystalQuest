@@ -62,13 +62,7 @@ public class ActionPanel extends JPanel {
                 
         g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 28F));
 
-        /*
-        for(Npc npc : this._gamePanel.player.collisionInfo.npcs) {        	
-        	
-        	g2.drawString(npc.getName(), menuX + this._gamePanel.tileSize, menuY + this._gamePanel.tileSize);
-        }*/
-        var iterator = this._gamePanel.player.actionDict.keys().asIterator();
-        
+        var iterator = this._gamePanel.player.actionDict.keys().asIterator();        
         while(iterator.hasNext()) {        	
         	g2.drawString(iterator.next(), menuX + this._gamePanel.tileSize, menuY + this._gamePanel.tileSize);
         }
