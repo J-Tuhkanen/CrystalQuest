@@ -140,14 +140,13 @@ public class Player extends Entity {
 		}
 		
 		updateMousePosition();
-		
 		if(this.inventoryIsOpen) {
 			this.inventory.updateSelectedInventorySlot(keyH);
 		}
-		if(this.actionMenuOpen) {
-			
+		else if(this.actionMenuOpen) {
+			// Add action menu iteraction here.
 		}
-		else {			
+		else {
 			updateMovement();		
 		}
 	}
