@@ -28,6 +28,9 @@ public class Player extends Entity {
 	int actionIndexUpper = 0;
 	int actionIndexDetailed = 0;
 	
+	private static final int walkSpeed = 4;
+	private static final double sprintMultiplier = 2.5;
+
 	int spriteCounter = 0;
 	public int cameraX, cameraY;
 	public Boolean inventoryIsOpen = false;
@@ -48,8 +51,8 @@ public class Player extends Entity {
 		this.cameraX = gp.screenWidth/2;
 		this.cameraY = gp.screenHeight/2;
 		
-		speed = 4;
-		teleportTo(gp.tileSize * 5, gp.tileSize * 16); 
+		speed = walkSpeed;
+		teleportTo(gp.tileSize * 5, gp.tileSize * 16);
 	}
 	
 	public void teleportTo(int worldX, int worldY) {
@@ -84,10 +87,12 @@ public class Player extends Entity {
 			this.movementDirection = Direction.Right;
 		}
 		
-		this.updateLookDirection(isMoving);		
+		this.speed = keyH.sprintPressed ? (int)(walkSpeed * sprintMultiplier) : walkSpeed;
+
+		this.updateLookDirection(isMoving);
 		this.collisionInfo = this.checkCollision();
 		this.actionDict = this.collisionInfo.getAsActions();
-		
+
 		if (isMoving && collisionOn == false) {
 			this.move();
 			this.updateSprite();
@@ -102,15 +107,47 @@ public class Player extends Entity {
 	}
 	
 	public void pickUpObject(GameObject obj) {
-							
+
 		// Find empty inventory slot
 		if (this.inventory.TryAdd(obj) && gp.objects.remove(obj)) {
-			
+
 			System.out.println("pick up " + obj.name);
 			return;
 		}
-	
+
 		System.out.println("Inventory is full.");
+	}
+
+	private void interactWith(GameObject obj) {
+
+		Action[] actions = obj.getActions();
+
+		if (actions.length == 0) {
+			return;
+		}
+
+		switch (actions[0]) {
+			case Pickup:
+				this.pickUpObject(obj);
+				break;
+			case Use:
+				this.useObject(obj);
+				break;
+			default:
+				break;
+		}
+	}
+
+	private void useObject(GameObject obj) {
+
+		if (obj.use(this)) {
+
+			gp.playSoundEffect("unlock");
+			System.out.println("used " + obj.name);
+		}
+		else {
+			System.out.println("Nothing happens.");
+		}
 	}
 
 	@Override
@@ -125,9 +162,9 @@ public class Player extends Entity {
 		}
 		
 		if(this.canToggleActionMenu && keyH.usePressed && (this.collisionInfo.npcs.size() > 0 || this.collisionInfo.gameObjects.size() > 0)) {
-			
-			if(this.actionMenuOpen) {				
-				this.pickUpObject(this.collisionInfo.gameObjects.get(actionIndexDetailed));
+
+			if(this.actionMenuOpen && !this.collisionInfo.gameObjects.isEmpty()) {
+				this.interactWith(this.collisionInfo.gameObjects.get(actionIndexDetailed));
 			}
 			this.canToggleActionMenu = false;
 			this.actionMenuOpen = !this.actionMenuOpen;

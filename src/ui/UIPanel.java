@@ -9,12 +9,20 @@ public class UIPanel extends JLayeredPane {
 	private final DialogPanel _dialog;
 	private final ActionPanel _hint;
 	private final InventoryPanel _inventory;
-	
+	private final ChatBubblePanel _chatBubbles;
+
 	public UIPanel(GamePanel gp) {
-		
+
 		_dialog = new DialogPanel(gp);
 		_hint = new ActionPanel(gp);
 		_inventory = new InventoryPanel(gp);
+		_chatBubbles = new ChatBubblePanel(gp);
+
+		this._chatBubbles.setBounds(
+				0,
+				0,
+				gp.screenWidth,
+				gp.screenHeight);
 		
 		this._hint.setBounds(
 				0, 
@@ -34,8 +42,9 @@ public class UIPanel extends JLayeredPane {
 		int dialogY = (dialogHeight/10);
 		this._dialog.setBounds(dialogX, dialogY, dialogWidth, dialogHeight);
 		
-		this.add(this._inventory, 0);		
+		this.add(this._inventory, 0);
 		this.add(this._hint, 1);
 		this.add(this._dialog, 2);
+		this.add(this._chatBubbles, 3);
 	}
 }
