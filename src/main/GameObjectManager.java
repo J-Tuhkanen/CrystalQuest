@@ -24,6 +24,11 @@ public class GameObjectManager {
 		key.worldY = _gamePanel.tileSize * 25;
 		_gamePanel.objects.add(key);
 
+		Key duplicateKey = new Key(frontDoorId);
+		duplicateKey.worldX = _gamePanel.tileSize * 10;
+		duplicateKey.worldY = _gamePanel.tileSize * 25;
+		_gamePanel.objects.add(duplicateKey);
+
 		TreasureChest chest = new TreasureChest();
 		chest.worldX = _gamePanel.tileSize * 22;
 		chest.worldY = _gamePanel.tileSize * 21;
