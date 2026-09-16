@@ -10,9 +10,6 @@ import java.awt.RenderingHints;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import entity.Npc;
-import object.GameObject;
-
 public class ActionPanel extends JPanel {
 
 	private static final long serialVersionUID = 9011400371067015922L;
@@ -29,6 +26,7 @@ public class ActionPanel extends JPanel {
 		this.setOpaque(false);
 	}
 
+	@Override
 	public void paintComponent(Graphics graphics) {
 		super.paintComponent(graphics);
 		var collisionInfo = this._gamePanel.player.collisionInfo;
@@ -37,7 +35,7 @@ public class ActionPanel extends JPanel {
 		if(this._gamePanel.player.actionMenuOpen) {
 			this.drawActionMenu((Graphics2D)graphics);
 		}
-		else if(collisionInfo.npcs.size() > 0 || collisionInfo.gameObjects.size() > 0) {
+		else if(!collisionInfo.npcs.isEmpty() || !collisionInfo.gameObjects.isEmpty()) {
 			this._hintLabel.setText("Press E for action menu");
 		}
 	}
