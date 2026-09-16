@@ -15,7 +15,7 @@ public class KeyHandler implements KeyListener {
 	public boolean inventoryReleased = true;
 	public boolean useReleased = true;
 
-	private GamePanel gamePanel;
+	private final GamePanel gamePanel;
 	private int menuMovement;
 	private boolean pendingUse;
 
@@ -64,12 +64,13 @@ public class KeyHandler implements KeyListener {
 			inventoryReleased = false;
 		}
 		if(code == KeyEvent.VK_W) {
-			if (!upPressed && gamePanel.player.actionMenu.isOpen()) menuMovement--;
+			if (!upPressed && gamePanel.player.actionMenu.isOpen()) 
+				menuMovement--;
 			this.upPressed = true;
 		}
 		if(code == KeyEvent.VK_S) {
-
-			if (!downPressed && gamePanel.player.actionMenu.isOpen()) menuMovement++;
+			if (!downPressed && gamePanel.player.actionMenu.isOpen()) 
+				menuMovement++;
 			this.downPressed = true;
 		}
 		if(code == KeyEvent.VK_D) {
