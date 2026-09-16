@@ -29,7 +29,10 @@ public abstract class Entity  {
 	public boolean collisionOn = false;
 	
 	public Rectangle hitBox;
-	
+
+	private static final int defaultChatBubbleDurationMs = 3000;
+	public ChatBubble chatBubble;
+
 	public BufferedImage[] up = new BufferedImage[this.spriteCount];
 	public BufferedImage[] left = new BufferedImage[this.spriteCount];
 	public BufferedImage[] right = new BufferedImage[this.spriteCount];
@@ -103,6 +106,24 @@ public abstract class Entity  {
 		}
 	}
 	
+	// Shows a chat bubble with the given message above this entity for a few seconds.
+	// The message goes away on its own and never blocks movement or input.
+	public void say(String message) {
+		this.say(message, defaultChatBubbleDurationMs);
+	}
+
+	public void say(String message, int durationMs) {
+		this.chatBubble = new ChatBubble(message, durationMs);
+	}
+
+	public int getScreenX() {
+		return this.worldX - gp.player.worldX + gp.player.cameraX;
+	}
+
+	public int getScreenY() {
+		return this.worldY - gp.player.worldY + gp.player.cameraY;
+	}
+
 	protected void updateSprite() {
 		
 		this._spriteCounter++;

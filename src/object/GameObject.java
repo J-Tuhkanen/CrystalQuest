@@ -5,12 +5,14 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 import entity.Action;
+import entity.Player;
 import ui.GamePanel;
 
 public abstract class GameObject {
 
 	public BufferedImage image;
 	public String name;
+	public int id;
 	public boolean collision = false;
 	public int worldX, worldY;
 	public Rectangle solidArea = new Rectangle(0,0,48,48);
@@ -31,5 +33,11 @@ public abstract class GameObject {
 	
 	public Action[] getActions() {
 		return new Action[0];
+	}
+
+	// Attempt to use this object, e.g. unlocking a door with a key from the player's inventory.
+	// Returns whether the use had an effect.
+	public boolean use(Player player) {
+		return false;
 	}
 }

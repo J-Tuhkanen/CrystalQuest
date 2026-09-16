@@ -9,7 +9,7 @@ import ui.GamePanel;
 public class KeyHandler implements KeyListener {
 
 	// Pressed
-	public boolean upPressed, downPressed, leftPressed, rightPressed, inventoryPressed, usePressed, escapePressed;
+	public boolean upPressed, downPressed, leftPressed, rightPressed, inventoryPressed, usePressed, escapePressed, sprintPressed;
 	
 	// Released
 	public boolean inventoryReleased = true;
@@ -65,6 +65,9 @@ public class KeyHandler implements KeyListener {
 			this.usePressed = true;
 			this.useReleased = false;
 		}
+		if(code == KeyEvent.VK_SPACE) {
+			this.sprintPressed = true;
+		}
 	}
 	
 	@Override
@@ -93,6 +96,9 @@ public class KeyHandler implements KeyListener {
 		if(code == KeyEvent.VK_E) {
 			this.usePressed = false;
 			this.useReleased = true;
+		}
+		if(code == KeyEvent.VK_SPACE) {
+			this.sprintPressed = false;
 		}
 	}
 }
