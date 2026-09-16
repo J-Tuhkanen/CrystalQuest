@@ -16,6 +16,20 @@ public class KeyHandler implements KeyListener {
 	public boolean useReleased = true;
 
 	private GamePanel gamePanel;
+	private int menuMovement;
+	private boolean pendingUse;
+
+	public synchronized int consumeMenuMovement() {
+		int movement = menuMovement;
+		menuMovement = 0;
+		return movement;
+	}
+
+	public synchronized boolean consumeUsePress() {
+		boolean pressed = pendingUse;
+		pendingUse = false;
+		return pressed;
+	}
 	
 	public KeyHandler(GamePanel gamePanel) {
 		
@@ -27,14 +41,17 @@ public class KeyHandler implements KeyListener {
 	}	
 
 	@Override
-	public void keyPressed(KeyEvent e) {
+	public synchronized void keyPressed(KeyEvent e) {
 				
 		int code = e.getKeyCode();
 		
-		if(code == KeyEvent.VK_ESCAPE) {
+		if(code == KeyEvent.VK_ESCAPE && !escapePressed) {
+			escapePressed = true;
+			menuMovement = 0;
+			pendingUse = false;
 			
-			if(this.gamePanel.player.actionMenuOpen) {
-				this.gamePanel.player.actionMenuOpen = false;
+			if(this.gamePanel.player.actionMenu.isOpen()) {
+				this.gamePanel.player.actionMenu.close();
 			}
 			else {
 				this.gamePanel.gameState = this.gamePanel.gameState == GameState.Paused 
@@ -47,10 +64,12 @@ public class KeyHandler implements KeyListener {
 			inventoryReleased = false;
 		}
 		if(code == KeyEvent.VK_W) {
+			if (!upPressed && gamePanel.player.actionMenu.isOpen()) menuMovement--;
 			this.upPressed = true;
 		}
 		if(code == KeyEvent.VK_S) {
 
+			if (!downPressed && gamePanel.player.actionMenu.isOpen()) menuMovement++;
 			this.downPressed = true;
 		}
 		if(code == KeyEvent.VK_D) {
@@ -62,6 +81,7 @@ public class KeyHandler implements KeyListener {
 			this.leftPressed = true;
 		}
 		if(code == KeyEvent.VK_E && this.useReleased) {
+			this.pendingUse = gamePanel.gameState != GameState.Paused;
 			this.usePressed = true;
 			this.useReleased = false;
 		}
@@ -71,9 +91,10 @@ public class KeyHandler implements KeyListener {
 	}
 	
 	@Override
-	public void keyReleased(KeyEvent e) {
+	public synchronized void keyReleased(KeyEvent e) {
 		int code = e.getKeyCode();
 		
+		if(code == KeyEvent.VK_ESCAPE) escapePressed = false;
 		if(code == KeyEvent.VK_I) {
 			this.inventoryPressed = false;
 			this.inventoryReleased = true;

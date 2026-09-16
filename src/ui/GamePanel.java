@@ -109,6 +109,7 @@ public class GamePanel extends JPanel implements Runnable {
 		}
 		for(var npc : this.npcs) {
 			
+			if (player.actionMenu.freezes(npc)) continue;
 			npc.updateAction();
 			npc.update();
 		}

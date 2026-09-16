@@ -59,7 +59,7 @@ public abstract class Entity  {
 	public abstract void update();	
 	public abstract void draw(Graphics2D g);
 	
-	public void setupCollision() {
+	private void setupCollision() {
 		
 		this.collision = new Rectangle();
 		this.collision.height = 10;

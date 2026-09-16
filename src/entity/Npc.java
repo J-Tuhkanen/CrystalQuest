@@ -9,8 +9,8 @@ import ui.GamePanel;
 
 public abstract class Npc extends Entity {
 
-	private Action[] _actions;
-	private String _name;
+	private final Action[] _actions;
+	private final String _name;
 	
 	public Npc(GamePanel gp, String name, Action[] actions, boolean canPickupItems, String imagePrefix) {
 		super(canPickupItems, gp, imagePrefix);
@@ -33,20 +33,11 @@ public abstract class Npc extends Entity {
 			BufferedImage image = null;		
 			
 			switch(this.lookDirection) {
-				case Direction.Up:
-					image = this.up[spriteIndex];
-					break;
-				case Direction.Down:
-					image = this.down[spriteIndex];
-					break;
-				case Direction.Left:
-					image = this.left[spriteIndex];
-					break;
-				case Direction.Right:
-					image = this.right[spriteIndex];
-					break;
-				default:
-					break;
+				case Direction.Up -> image = this.up[spriteIndex];
+				case Direction.Down -> image = this.down[spriteIndex];
+				case Direction.Left -> image = this.left[spriteIndex];
+				case Direction.Right -> image = this.right[spriteIndex];
+				default -> {}
 			}
 			
 			g.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
@@ -69,6 +60,5 @@ public abstract class Npc extends Entity {
 			this.gp.collisiongChecker.checkPlayerCollision(this);
 		}
 		return collInfo;
-	}
-	
+	}	
 }

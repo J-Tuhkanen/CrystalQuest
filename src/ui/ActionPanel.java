@@ -32,7 +32,7 @@ public class ActionPanel extends JPanel {
 		var collisionInfo = this._gamePanel.player.collisionInfo;
 		this._hintLabel.setText(null);
 		
-		if(this._gamePanel.player.actionMenuOpen) {
+		if(this._gamePanel.player.actionMenu.isOpen()) {
 			this.drawActionMenu((Graphics2D)graphics);
 		}
 		else if(!collisionInfo.npcs.isEmpty() || !collisionInfo.gameObjects.isEmpty()) {
@@ -45,7 +45,11 @@ public class ActionPanel extends JPanel {
 		int menuX = this._gamePanel.tileSize;
 		int menuY = this._gamePanel.tileSize;		
 		int width = this._gamePanel.tileSize*7;
-		int height = this._gamePanel.tileSize*5;
+		var menu = this._gamePanel.player.actionMenu;
+		var labels = menu.labels();
+		int rowHeight = 40;
+		int visibleRows = Math.min(labels.size(), (this._gamePanel.screenHeight - menuY * 2 - 80) / rowHeight);
+		int height = Math.max(120, 80 + visibleRows * rowHeight);
 		
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		
@@ -60,9 +64,16 @@ public class ActionPanel extends JPanel {
                 
         g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 28F));
 
-        var iterator = this._gamePanel.player.actionDict.keys().asIterator();        
-        while(iterator.hasNext()) {        	
-        	g2.drawString(iterator.next(), menuX + this._gamePanel.tileSize, menuY + this._gamePanel.tileSize);
+        var target = menu.selectedTarget();
+        g2.setColor(Color.WHITE);
+        g2.drawString(target == null ? "Choose target" : target.name(), menuX + 24, menuY + 36);
+        int firstRow = Math.max(0, menu.selectedIndex() - visibleRows + 1);
+        if (labels.isEmpty()) {
+            g2.drawString("No available actions", menuX + 24, menuY + 80);
+        }
+        for (int i = firstRow; i < Math.min(labels.size(), firstRow + visibleRows); i++) {
+            g2.setColor(i == menu.selectedIndex() ? new Color(190, 160, 35) : Color.WHITE);
+            g2.drawString(labels.get(i), menuX + 24, menuY + 80 + (i - firstRow) * rowHeight);
         }
 	}
 }
