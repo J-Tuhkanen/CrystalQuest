@@ -49,12 +49,9 @@ public class OldManNpc extends Npc {
 	
 	@Override
 	public void update() {
-		
-		if(this.movementDirection != null) {
+		if(this.movementDirection != null)
 			this.updateMovement();
-		}
-	}
-	
+	}	
 	
 	private void updateMovement() {
 		

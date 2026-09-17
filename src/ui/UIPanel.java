@@ -44,6 +44,7 @@ public class UIPanel extends JLayeredPane {
 		
 		this.add(this._inventory, 0);
 		this.add(this._hint, 1);
+		this.setLayer(this._hint, 100);
 		this.add(this._dialog, 2);
 		this.add(this._chatBubbles, 3);
 	}

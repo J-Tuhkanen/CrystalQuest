@@ -1,15 +1,12 @@
 package entity;
 
+import javax.swing.SwingUtilities;
 import java.awt.Graphics2D;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.Dictionary;
-import java.util.Hashtable;
-
-import javax.swing.SwingUtilities;
-
+import main.ActionMenu;
 import main.CollisionInformation;
 import main.Inventory;
 import main.KeyHandler;
@@ -18,30 +15,24 @@ import main.Enum.Direction;
 import object.GameObject;
 import ui.GamePanel;
 
-public class Player extends Entity {
+public final class Player extends Entity {
 	
 	KeyHandler keyH;
 	MouseHandler mouseH;
 	
 	public Inventory inventory = new Inventory();
-	// public ActionMenu am = new()
-	int actionIndexUpper = 0;
-	int actionIndexDetailed = 0;
+	public final ActionMenu actionMenu = new ActionMenu();
 	
-	private static final int walkSpeed = 4;
-	private static final double sprintMultiplier = 2.5;
+	private static final int WALK_SPEED = 4;
+	private static final double SPRINT_MULTIPLIER = 2.5;
 
-	int spriteCounter = 0;
 	public int cameraX, cameraY;
 	public Boolean inventoryIsOpen = false;
 	public Boolean canToggleInventory = true;
-	public Boolean actionMenuOpen = false;
-	public Boolean canToggleActionMenu = true;
 	
 	Point mousePosition = MouseInfo.getPointerInfo().getLocation();
 	public CollisionInformation collisionInfo = new CollisionInformation(new ArrayList<Npc>(), new ArrayList<GameObject>());
-	public Dictionary<String, Action[]> actionDict = new Hashtable<>();
-	
+
 	public Player(GamePanel gp, KeyHandler keyH, MouseHandler mouseH) {
 		super(true, gp, "/player/boy");
 		this.gp = gp;
@@ -51,7 +42,7 @@ public class Player extends Entity {
 		this.cameraX = gp.screenWidth/2;
 		this.cameraY = gp.screenHeight/2;
 		
-		speed = walkSpeed;
+		speed = WALK_SPEED;
 		teleportTo(gp.tileSize * 5, gp.tileSize * 16);
 	}
 	
@@ -87,23 +78,15 @@ public class Player extends Entity {
 			this.movementDirection = Direction.Right;
 		}
 		
-		this.speed = keyH.sprintPressed ? (int)(walkSpeed * sprintMultiplier) : walkSpeed;
+		this.speed = keyH.sprintPressed ? (int)(WALK_SPEED * SPRINT_MULTIPLIER) : WALK_SPEED;
 
 		this.updateLookDirection(isMoving);
 		this.collisionInfo = this.checkCollision();
-		this.actionDict = this.collisionInfo.getAsActions();
 
 		if (isMoving && collisionOn == false) {
 			this.move();
 			this.updateSprite();
 		}		
-	}
-	
-	public void updateActionMenuMovement() {
-		
-		if(keyH.downPressed) {
-			
-		}
 	}
 	
 	public void pickUpObject(GameObject obj) {
@@ -115,26 +98,19 @@ public class Player extends Entity {
 			return;
 		}
 
-		System.out.println("Inventory is full.");
+		say("Inventory is full.");
 	}
 
-	private void interactWith(GameObject obj) {
-
-		Action[] actions = obj.getActions();
-
-		if (actions.length == 0) {
-			return;
+	private void interactWith(ActionMenu.Target target, Action action) {
+		GameObject obj = target.object();
+		if (obj != null && action == Action.Pickup) {
+			pickUpObject(obj);
 		}
-
-		switch (actions[0]) {
-			case Pickup:
-				this.pickUpObject(obj);
-				break;
-			case Use:
-				this.useObject(obj);
-				break;
-			default:
-				break;
+		else if (obj != null && action == Action.Use) {
+			useObject(obj);
+		}
+		else {
+			say("Not implemented yet");
 		}
 	}
 
@@ -146,7 +122,7 @@ public class Player extends Entity {
 			System.out.println("used " + obj.name);
 		}
 		else {
-			System.out.println("Nothing happens.");
+			say("Hmm... nothing happens.");
 		}
 	}
 
@@ -161,30 +137,33 @@ public class Player extends Entity {
 			canToggleInventory = true;
 		}
 		
-		if(this.canToggleActionMenu && keyH.usePressed && (this.collisionInfo.npcs.size() > 0 || this.collisionInfo.gameObjects.size() > 0)) {
-
-			if(this.actionMenuOpen && !this.collisionInfo.gameObjects.isEmpty()) {
-				this.interactWith(this.collisionInfo.gameObjects.get(actionIndexDetailed));
+		boolean menuWasOpen = actionMenu.isOpen();
+		int menuMovement = keyH.consumeMenuMovement();
+		if (menuWasOpen) actionMenu.move(menuMovement);
+		if (keyH.consumeUsePress()) {
+			if (actionMenu.isOpen()) {
+				Action action = actionMenu.select();
+				if (action != null) {
+					interactWith(actionMenu.selectedTarget(), action);
+					actionMenu.close();
+					collisionInfo = checkCollision();
+				}
 			}
-			this.canToggleActionMenu = false;
-			this.actionMenuOpen = !this.actionMenuOpen;
+			else {
+				collisionInfo = checkCollision();
+				actionMenu.open(collisionInfo);
+			}
 		}
-		else if(keyH.useReleased) {
-			this.canToggleActionMenu = true;
-		}
-		else if ((this.collisionInfo.npcs.size() < 1 && this.collisionInfo.gameObjects.size() < 1)) {
-			this.actionMenuOpen = false;
-		}
-		
+
 		updateMousePosition();
-		if(this.inventoryIsOpen) {
-			this.inventory.updateSelectedInventorySlot(keyH);
+		if (actionMenu.isOpen() || menuWasOpen) {
+			return;
 		}
-		else if(this.actionMenuOpen) {
-			// Add action menu iteraction here.
+		if (inventoryIsOpen) {
+			inventory.updateSelectedInventorySlot(keyH);
 		}
 		else {
-			updateMovement();		
+			updateMovement();
 		}
 	}
 	
@@ -194,20 +173,11 @@ public class Player extends Entity {
 		BufferedImage image = null;		
 		
 		switch(this.lookDirection) {
-			case Direction.Up:
-				image = this.up[spriteIndex];
-				break;
-			case Direction.Down:
-				image = this.down[spriteIndex];
-				break;
-			case Direction.Left:
-				image = this.left[spriteIndex];
-				break;
-			case Direction.Right:
-				image = this.right[spriteIndex];
-				break;
-			default:
-				break;
+			case Direction.Up -> image = this.up[spriteIndex];
+			case Direction.Down -> image = this.down[spriteIndex];
+			case Direction.Left -> image = this.left[spriteIndex];
+			case Direction.Right -> image = this.right[spriteIndex];
+			default -> {}
 		}
 		
 		g.drawImage(image, cameraX, cameraY, gp.tileSize, gp.tileSize, null);
