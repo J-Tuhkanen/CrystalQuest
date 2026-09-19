@@ -66,4 +66,50 @@ public class Inventory {
 	public GameObject getItemAt(int rowIndex, int columnIndex) {
 		return this.items[rowIndex * 6 + columnIndex];
 	}
+	
+	// Returns the slot index of the given object, or -1 if it's not in the inventory.
+	public int indexOf(GameObject object) {
+		
+		for(int i = 0; i < items.length; i++) {
+			if(this.items[i] == object) {
+				return i;
+			}
+		}
+		return -1;
+	}
+	
+	// Removes the given object. Returns whether it was in the inventory.
+	public boolean remove(GameObject object) {
+		
+		int index = this.indexOf(object);
+		if(index < 0) {
+			return false;
+		}
+		this.items[index] = null;
+		return true;
+	}
+	
+	public int freeSlotCount() {
+		
+		int count = 0;
+		for(GameObject item : this.items) {
+			if(item == null) {
+				count++;
+			}
+		}
+		return count;
+	}
+	
+	public int getSelectedIndex() {
+		return this.selectedRowIndex * 6 + this.selectedColumnIndex;
+	}
+	
+	public void setSelectedIndex(int index) {
+		this.selectedRowIndex = index / 6;
+		this.selectedColumnIndex = index % 6;
+	}
+	
+	public GameObject getSelectedItem() {
+		return this.items[this.getSelectedIndex()];
+	}
 }

@@ -1,6 +1,5 @@
 # Add this as your launch.json to run this program.
 ````
-```
 {
   "version": "0.2.0",
   "configurations": [
@@ -15,4 +14,3 @@
   ]
 }
 ````
-```

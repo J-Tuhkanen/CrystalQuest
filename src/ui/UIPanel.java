@@ -30,11 +30,7 @@ public class UIPanel extends JLayeredPane {
 				gp.screenWidth, 
 				gp.screenHeight);
 		
-		int inventoryWidth = gp.tileSize * 13;
-		int inventoryHeight = gp.tileSize * 8;
-		int inventoryX = (gp.screenWidth - inventoryWidth) / 2 ;
-		int inventoryY = (gp.screenHeight - inventoryHeight) / 2 ;
-		this._inventory.setBounds(inventoryX, inventoryY, inventoryWidth, inventoryHeight);
+		this._inventory.setBounds(InventoryPanel.getInventoryBounds(gp));
 		
 		int dialogWidth = this._dialog.getWidth();
 		int dialogHeight = this._dialog.getHeight();
@@ -47,5 +43,7 @@ public class UIPanel extends JLayeredPane {
 		this.setLayer(this._hint, 100);
 		this.add(this._dialog, 2);
 		this.add(this._chatBubbles, 3);
+		// Above the inventory so messages from inventory actions stay visible, below the menus.
+		this.setLayer(this._chatBubbles, 50);
 	}
 }

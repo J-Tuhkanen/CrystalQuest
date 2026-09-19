@@ -15,9 +15,10 @@ public class KeyHandler implements KeyListener {
 	public boolean inventoryReleased = true;
 	public boolean useReleased = true;
 
-	private GamePanel gamePanel;
+	private final GamePanel gamePanel;
 	private int menuMovement;
 	private boolean pendingUse;
+	private boolean pendingEscape;
 
 	public synchronized int consumeMenuMovement() {
 		int movement = menuMovement;
@@ -28,6 +29,13 @@ public class KeyHandler implements KeyListener {
 	public synchronized boolean consumeUsePress() {
 		boolean pressed = pendingUse;
 		pendingUse = false;
+		return pressed;
+	}
+
+	// Escape presses meant for an open menu or the inventory; handled by Player.update().
+	public synchronized boolean consumeEscapePress() {
+		boolean pressed = pendingEscape;
+		pendingEscape = false;
 		return pressed;
 	}
 	
@@ -50,13 +58,17 @@ public class KeyHandler implements KeyListener {
 			menuMovement = 0;
 			pendingUse = false;
 			
-			if(this.gamePanel.player.actionMenu.isOpen()) {
-				this.gamePanel.player.actionMenu.close();
+			var player = this.gamePanel.player;
+			
+			if(this.gamePanel.gameState == GameState.Paused) {
+				this.gamePanel.gameState = GameState.Running;
+			}
+			else if(player.actionMenu.isOpen() || player.inventoryIsOpen) {
+				// Menus and inventory modes step back one level at a time; see Player.handleEscape().
+				this.pendingEscape = true;
 			}
 			else {
-				this.gamePanel.gameState = this.gamePanel.gameState == GameState.Paused 
-					? GameState.Running 
-					: GameState.Paused;
+				this.gamePanel.gameState = GameState.Paused;
 			}
 		}
 		if(code == KeyEvent.VK_I && inventoryReleased) {			
@@ -64,12 +76,13 @@ public class KeyHandler implements KeyListener {
 			inventoryReleased = false;
 		}
 		if(code == KeyEvent.VK_W) {
-			if (!upPressed && gamePanel.player.actionMenu.isOpen()) menuMovement--;
+			if (!upPressed && gamePanel.player.actionMenu.isOpen()) 
+				menuMovement--;
 			this.upPressed = true;
 		}
 		if(code == KeyEvent.VK_S) {
-
-			if (!downPressed && gamePanel.player.actionMenu.isOpen()) menuMovement++;
+			if (!downPressed && gamePanel.player.actionMenu.isOpen()) 
+				menuMovement++;
 			this.downPressed = true;
 		}
 		if(code == KeyEvent.VK_D) {

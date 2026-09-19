@@ -1,9 +1,5 @@
 package object;
 
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
-
 import entity.Action;
 
 public class Key extends GameObject {
@@ -20,13 +16,8 @@ public class Key extends GameObject {
 
 		this.opensId = opensId;
 		this.name = "Key";
-		try {
-			
-			this.image = ImageIO.read(getClass().getResourceAsStream("/objects/key.png")); 
-		}
-		catch(IOException e) {
-			e.printStackTrace();
-		}
+		this.description = "A small iron key. It must open something around here.";
+		this.image = loadImage("/objects/key.png");
 	}
 
 	@Override

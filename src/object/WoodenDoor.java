@@ -1,9 +1,6 @@
 package object;
 
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
 
 import entity.Action;
 import entity.Player;
@@ -11,21 +8,16 @@ import entity.Player;
 public class WoodenDoor extends GameObject {
 
 	public boolean locked = true;
-	private BufferedImage openImage;
+	private final BufferedImage _openImage;
 
 	public WoodenDoor(int id) {
 
 		this.id = id;
 		this.name = "Door";
+		this.description = "A heavy wooden door. It's locked.";
 		this.collision = true;
-		try {
-
-			this.image = ImageIO.read(getClass().getResourceAsStream("/objects/door.png"));
-			this.openImage = ImageIO.read(getClass().getResourceAsStream("/objects/door_opened.png"));
-		}
-		catch(IOException e) {
-			e.printStackTrace();
-		}
+		this.image = loadImage("/objects/door.png");
+		this._openImage = loadImage("/objects/door_opened.png");
 	}
 
 	@Override
@@ -42,16 +34,16 @@ public class WoodenDoor extends GameObject {
 			return false;
 		}
 
-		for (int i = 0; i < player.inventory.items.length; i++) {
-
-			GameObject item = player.inventory.items[i];
+		for (GameObject item : player.inventory.items) {
 
 			if (item instanceof Key key && key.opensId == this.id) {
 
 				this.locked = false;
 				this.collision = false;
-				this.image = this.openImage;
-				player.inventory.RemoveAt(i);
+				this.image = this._openImage;
+				this.description = "A heavy wooden door. It stands open.";
+				player.consume(key);
+				player.playSoundEffect("unlock");
 				return true;
 			}
 		}

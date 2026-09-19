@@ -12,6 +12,8 @@ import main.Inventory;
 import main.KeyHandler;
 import main.MouseHandler;
 import main.Enum.Direction;
+import main.Enum.InventoryMode;
+import object.CombineResult;
 import object.GameObject;
 import ui.GamePanel;
 
@@ -29,6 +31,9 @@ public final class Player extends Entity {
 	public int cameraX, cameraY;
 	public Boolean inventoryIsOpen = false;
 	public Boolean canToggleInventory = true;
+	public InventoryMode inventoryMode = InventoryMode.Browsing;
+	// Slot of the item being combined while in Combining mode, otherwise -1.
+	public int combineSourceSlot = -1;
 	
 	Point mousePosition = MouseInfo.getPointerInfo().getLocation();
 	public CollisionInformation collisionInfo = new CollisionInformation(new ArrayList<Npc>(), new ArrayList<GameObject>());
@@ -92,13 +97,25 @@ public final class Player extends Entity {
 	public void pickUpObject(GameObject obj) {
 
 		// Find empty inventory slot
-		if (this.inventory.TryAdd(obj) && gp.objects.remove(obj)) {
+		if (this.inventory.TryAdd(obj) && gp.getGameObjectManager().despawn(obj)) {
 
 			System.out.println("pick up " + obj.name);
 			return;
 		}
 
 		say("Inventory is full.");
+	}
+
+	// Removes an object from the game: from the inventory if it's there, otherwise from the world.
+	public void consume(GameObject obj) {
+
+		if (!this.inventory.remove(obj)) {
+			gp.getGameObjectManager().despawn(obj);
+		}
+	}
+
+	public void playSoundEffect(String soundName) {
+		gp.playSoundEffect(soundName);
 	}
 
 	private void interactWith(ActionMenu.Target target, Action action) {
@@ -109,21 +126,155 @@ public final class Player extends Entity {
 		else if (obj != null && action == Action.Use) {
 			useObject(obj);
 		}
+		else if (action == Action.Examine) {
+			say(obj != null ? obj.examine() : target.npc().examine());
+		}
 		else {
 			say("Not implemented yet");
 		}
 	}
 
+	private void interactWithItem(ActionMenu.Target target, Action action) {
+
+		GameObject item = target.object();
+		int slot = target.inventorySlot();
+
+		// The item may have moved or disappeared since the menu was opened.
+		if (this.inventory.items[slot] != item) {
+			return;
+		}
+
+		switch (action) {
+			case Use -> useObject(item);
+			case Examine -> say(item.examine());
+			case Drop -> dropItem(slot);
+			case Combine -> {
+				this.inventoryMode = InventoryMode.Combining;
+				this.combineSourceSlot = slot;
+			}
+			default -> say("Not implemented yet");
+		}
+	}
+
 	private void useObject(GameObject obj) {
 
-		if (obj.use(this)) {
+		var bubbleBefore = this.chatBubble;
 
-			gp.playSoundEffect("unlock");
+		if (obj.use(this)) {
 			System.out.println("used " + obj.name);
 		}
-		else {
+		// Only fall back to the generic message if the object didn't explain itself.
+		else if (this.chatBubble == bubbleBefore) {
 			say("Hmm... nothing happens.");
 		}
+	}
+
+	private void dropItem(int slot) {
+
+		GameObject item = this.inventory.RemoveAt(slot);
+
+		if (item != null) {
+			gp.getGameObjectManager().spawn(item, this.worldX, this.worldY);
+		}
+	}
+
+	private void combineItems(int sourceSlot, int otherSlot) {
+
+		GameObject source = this.inventory.items[sourceSlot];
+		GameObject other = this.inventory.items[otherSlot];
+		this.inventoryMode = InventoryMode.Browsing;
+		this.combineSourceSlot = -1;
+
+		CombineResult result = source.combineWith(other, this);
+		if (result == null) {
+			result = other.combineWith(source, this);
+		}
+		if (result == null) {
+			say("I can't combine those.");
+			return;
+		}
+
+		// Check for space before changing anything.
+		int freeSlots = this.inventory.freeSlotCount();
+		for (GameObject removed : result.removed()) {
+			if (this.inventory.indexOf(removed) >= 0) {
+				freeSlots++;
+			}
+		}
+		if (result.added().size() > freeSlots) {
+			say("Inventory is full.");
+			return;
+		}
+
+		for (GameObject removed : result.removed()) {
+			consume(removed);
+		}
+
+		int firstNewSlot = -1;
+		for (GameObject added : result.added()) {
+			this.inventory.TryAdd(added);
+			if (firstNewSlot < 0) {
+				firstNewSlot = this.inventory.indexOf(added);
+			}
+		}
+		if (firstNewSlot >= 0) {
+			this.inventory.setSelectedIndex(firstNewSlot);
+		}
+		if (result.message() != null) {
+			say(result.message());
+		}
+	}
+
+	// E with the inventory open (and no menu open).
+	private void handleInventoryUse() {
+
+		int slot = this.inventory.getSelectedIndex();
+		GameObject item = this.inventory.items[slot];
+
+		if (this.inventoryMode == InventoryMode.Combining) {
+			if (slot == this.combineSourceSlot) {
+				this.inventoryMode = InventoryMode.Browsing;
+				this.combineSourceSlot = -1;
+			}
+			else if (item != null) {
+				combineItems(this.combineSourceSlot, slot);
+			}
+			return;
+		}
+
+		if (item != null) {
+			this.actionMenu.openForItem(item, slot);
+			this.inventoryMode = InventoryMode.ItemMenu;
+		}
+	}
+
+	// Escape steps back one level: menu -> inventory mode -> closed inventory.
+	private void handleEscape() {
+
+		if (this.actionMenu.isOpen()) {
+			this.actionMenu.close();
+			if (this.inventoryMode == InventoryMode.ItemMenu) {
+				this.inventoryMode = InventoryMode.Browsing;
+			}
+		}
+		else if (this.inventoryIsOpen) {
+			if (this.inventoryMode == InventoryMode.Browsing) {
+				this.inventoryIsOpen = false;
+			}
+			this.inventoryMode = InventoryMode.Browsing;
+			this.combineSourceSlot = -1;
+		}
+	}
+
+	private void toggleInventory() {
+
+		// Closing the inventory also closes the item menu, but leaves a world menu alone.
+		if (this.actionMenu.isItemMenu()) {
+			this.actionMenu.close();
+		}
+		this.inventoryIsOpen = !this.inventoryIsOpen;
+		this.inventoryMode = InventoryMode.Browsing;
+		this.combineSourceSlot = -1;
 	}
 
 	@Override
@@ -131,10 +282,14 @@ public final class Player extends Entity {
 		
 		if (keyH.inventoryPressed && canToggleInventory) {
 			canToggleInventory = false;
-			this.inventoryIsOpen = !this.inventoryIsOpen;
+			toggleInventory();
 		}
 		else if(keyH.inventoryReleased) {
 			canToggleInventory = true;
+		}
+		
+		if (keyH.consumeEscapePress()) {
+			handleEscape();
 		}
 		
 		boolean menuWasOpen = actionMenu.isOpen();
@@ -144,10 +299,20 @@ public final class Player extends Entity {
 			if (actionMenu.isOpen()) {
 				Action action = actionMenu.select();
 				if (action != null) {
-					interactWith(actionMenu.selectedTarget(), action);
+					var target = actionMenu.selectedTarget();
 					actionMenu.close();
+					if (target.inventorySlot() >= 0) {
+						this.inventoryMode = InventoryMode.Browsing;
+						interactWithItem(target, action);
+					}
+					else {
+						interactWith(target, action);
+					}
 					collisionInfo = checkCollision();
 				}
+			}
+			else if (inventoryIsOpen) {
+				handleInventoryUse();
 			}
 			else {
 				collisionInfo = checkCollision();

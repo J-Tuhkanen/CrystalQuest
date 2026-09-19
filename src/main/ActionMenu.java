@@ -10,7 +10,8 @@ import object.GameObject;
 /** Keeps target identity and the two menu levels together. */
 public class ActionMenu {
 
-	public record Target(String name, Action[] actions, GameObject object, Npc npc) {}
+	/** inventorySlot is the item's inventory slot, or -1 for targets in the world. */
+	public record Target(String name, Action[] actions, GameObject object, Npc npc, int inventorySlot) {}
 	private List<Target> targets = List.of();
 	private int targetIndex = -1;
 	private int selectedIndex;
@@ -19,10 +20,10 @@ public class ActionMenu {
 	public void open(CollisionInformation collisions) {
 		var entries = new ArrayList<Target>();
 		for (var object : collisions.gameObjects) {
-			entries.add(new Target(object.name, object.getActions().clone(), object, null));
+			entries.add(new Target(object.name, object.getActions().clone(), object, null, -1));
 		}
 		for (var npc : collisions.npcs) {
-			entries.add(new Target(npc.getName(), npc.getActions().clone(), null, npc));
+			entries.add(new Target(npc.getName(), npc.getActions().clone(), null, npc, -1));
 		}
 		targets = List.copyOf(entries);
 		targetIndex = targets.size() == 1 ? 0 : -1;
@@ -30,7 +31,19 @@ public class ActionMenu {
 		open = !targets.isEmpty();
 	}
 
+	/** Opens the menu for an inventory item: a single target, so there is no target-picking level. */
+	public void openForItem(GameObject item, int slot) {
+		targets = List.of(new Target(item.name, item.getInventoryActions().clone(), item, null, slot));
+		targetIndex = 0;
+		selectedIndex = 0;
+		open = true;
+	}
+
 	public boolean isOpen() { return open; }
+	public boolean isItemMenu() {
+		var target = selectedTarget();
+		return open && target != null && target.inventorySlot() >= 0;
+	}
 	public void close() { open = false; }
 	public int selectedIndex() { return selectedIndex; }
 	public Target selectedTarget() { return targetIndex < 0 ? null : targets.get(targetIndex); }

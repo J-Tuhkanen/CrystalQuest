@@ -5,10 +5,14 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.RenderingHints;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import main.Enum.GameState;
+import main.Enum.InventoryMode;
 
 public class ActionPanel extends JPanel {
 
@@ -29,11 +33,24 @@ public class ActionPanel extends JPanel {
 	@Override
 	public void paintComponent(Graphics graphics) {
 		super.paintComponent(graphics);
-		var collisionInfo = this._gamePanel.player.collisionInfo;
+		var player = this._gamePanel.player;
+		var collisionInfo = player.collisionInfo;
+		boolean inventoryVisible = player.inventoryIsOpen && this._gamePanel.gameState == GameState.Running;
 		this._hintLabel.setText(null);
 		
-		if(this._gamePanel.player.actionMenu.isOpen()) {
+		if(player.actionMenu.isItemMenu()) {
+			if(inventoryVisible) {
+				this.drawItemMenu((Graphics2D)graphics);
+			}
+		}
+		else if(player.actionMenu.isOpen()) {
 			this.drawActionMenu((Graphics2D)graphics);
+		}
+		else if(player.inventoryIsOpen) {
+			var source = player.combineSourceSlot >= 0 ? player.inventory.items[player.combineSourceSlot] : null;
+			if(inventoryVisible && player.inventoryMode == InventoryMode.Combining && source != null) {
+				this._hintLabel.setText("Combine " + source.name + " with\u2026");
+			}
 		}
 		else if(!collisionInfo.npcs.isEmpty() || !collisionInfo.gameObjects.isEmpty()) {
 			this._hintLabel.setText("Press E for action menu");
@@ -75,5 +92,53 @@ public class ActionPanel extends JPanel {
             g2.setColor(i == menu.selectedIndex() ? new Color(190, 160, 35) : Color.WHITE);
             g2.drawString(labels.get(i), menuX + 24, menuY + 80 + (i - firstRow) * rowHeight);
         }
+	}
+	
+	// Item menu sized to its content, drawn to the right of the selected slot
+	// (or to the left when it would go off screen).
+	public void drawItemMenu(Graphics2D g2) {
+		
+		var menu = this._gamePanel.player.actionMenu;
+		var inventory = this._gamePanel.player.inventory;
+		var target = menu.selectedTarget();
+		var labels = menu.labels();
+		
+		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 28F));
+		var metrics = g2.getFontMetrics();
+		
+		int padding = 20;
+		int rowHeight = 40;
+		int textWidth = metrics.stringWidth(target.name());
+		for (var label : labels) {
+			textWidth = Math.max(textWidth, metrics.stringWidth(label));
+		}
+		int width = Math.max(200, textWidth + padding * 2);
+		int height = padding + rowHeight * (labels.size() + 1);
+		
+		Rectangle inventoryBounds = InventoryPanel.getInventoryBounds(this._gamePanel);
+		Rectangle slot = InventoryPanel.getSlotBounds(this._gamePanel, inventory.selectedRowIndex, inventory.selectedColumnIndex);
+		int slotX = inventoryBounds.x + slot.x;
+		int slotY = inventoryBounds.y + slot.y;
+		int gap = 8;
+		
+		int menuX = slotX + slot.width + gap;
+		if (menuX + width > this._gamePanel.screenWidth - gap) {
+			menuX = slotX - gap - width;
+		}
+		int menuY = Math.min(slotY, this._gamePanel.screenHeight - gap - height);
+		
+		g2.setColor(new Color(0,0,0, 200));
+		g2.fillRoundRect(menuX, menuY, width, height, 10, 10);
+		
+		g2.setColor(Color.WHITE);
+		g2.setStroke(new BasicStroke(4));
+		g2.drawRoundRect(menuX, menuY, width, height, 10, 10);
+		
+		g2.drawString(target.name(), menuX + padding, menuY + 36);
+		for (int i = 0; i < labels.size(); i++) {
+			g2.setColor(i == menu.selectedIndex() ? new Color(190, 160, 35) : Color.WHITE);
+			g2.drawString(labels.get(i), menuX + padding, menuY + 36 + (i + 1) * rowHeight);
+		}
 	}
 }

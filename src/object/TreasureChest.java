@@ -1,13 +1,10 @@
 package object;
 
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
-
 import entity.Action;
+
 public class TreasureChest extends GameObject {
 
-	private Action[] _actions = new Action[] { 
+	private final Action[] _actions = new Action[] { 
 		Action.Use, 
 		Action.Examine 
 	};
@@ -15,13 +12,8 @@ public class TreasureChest extends GameObject {
 	public TreasureChest() {
 		
 		this.name = "Treasure chest";
-		try {
-			
-			this.image = ImageIO.read(getClass().getResourceAsStream("/objects/chest.png")); 
-		}
-		catch(IOException e) {
-			e.printStackTrace();
-		}
+		this.description = "A sturdy wooden chest with iron bands.";
+		this.image = loadImage("/objects/chest.png");
 	}
 
 	@Override

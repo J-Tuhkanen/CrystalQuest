@@ -4,5 +4,7 @@ public enum Action {
 	Examine,
 	Talk,
 	Pickup,
-	Use
+	Use,
+	Drop,
+	Combine
 }

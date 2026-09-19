@@ -11,6 +11,7 @@ public abstract class Npc extends Entity {
 
 	private final Action[] _actions;
 	private final String _name;
+	protected String description = "Nothing special about them.";
 	
 	public Npc(GamePanel gp, String name, Action[] actions, boolean canPickupItems, String imagePrefix) {
 		super(canPickupItems, gp, imagePrefix);
@@ -50,6 +51,10 @@ public abstract class Npc extends Entity {
 	
 	public String getName() {
 		return this._name;
+	}
+
+	public String examine() {
+		return this.description;
 	}
 
 	@Override

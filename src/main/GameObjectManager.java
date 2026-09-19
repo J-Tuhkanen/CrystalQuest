@@ -1,7 +1,11 @@
 package main;
 
 import entity.OldManNpc;
+import object.Book;
+import object.GameObject;
 import object.Key;
+import object.Pickaxe;
+import object.Sword;
 import object.TreasureChest;
 import object.WoodenDoor;
 import ui.GamePanel;
@@ -15,29 +19,34 @@ public class GameObjectManager {
 		_gamePanel = gp;
 	}
 	
+	// Places an object into the world at the given pixel coordinates.
+	public void spawn(GameObject obj, int worldX, int worldY) {
+		
+		obj.worldX = worldX;
+		obj.worldY = worldY;
+		this._gamePanel.objects.add(obj);
+	}
+	
+	// Removes an object from the world. Returns whether it was in the world.
+	public boolean despawn(GameObject obj) {
+		
+		return this._gamePanel.objects.remove(obj);
+	}
+	
 	public void setObject() {
 		
+		int tileSize = _gamePanel.tileSize;
 		int frontDoorId = 1;
 
-		Key key = new Key(frontDoorId);
-		key.worldX = _gamePanel.tileSize * 9;
-		key.worldY = _gamePanel.tileSize * 25;
-		_gamePanel.objects.add(key);
+		spawn(new Key(frontDoorId), tileSize * 9, tileSize * 25);
+		spawn(new Key(frontDoorId), tileSize * 10, tileSize * 25);
+		spawn(new TreasureChest(), tileSize * 22, tileSize * 21);
+		spawn(new WoodenDoor(frontDoorId), tileSize * 22, tileSize * 25);
 
-		Key duplicateKey = new Key(frontDoorId);
-		duplicateKey.worldX = _gamePanel.tileSize * 10;
-		duplicateKey.worldY = _gamePanel.tileSize * 25;
-		_gamePanel.objects.add(duplicateKey);
-
-		TreasureChest chest = new TreasureChest();
-		chest.worldX = _gamePanel.tileSize * 22;
-		chest.worldY = _gamePanel.tileSize * 21;
-		_gamePanel.objects.add(chest);
-
-		WoodenDoor door = new WoodenDoor(frontDoorId);
-		door.worldX = _gamePanel.tileSize * 22;
-		door.worldY = _gamePanel.tileSize * 25;
-		_gamePanel.objects.add(door);
+		// Test items for the inventory action menu, near the player's start (tile 5, 16).
+		spawn(new Book("Old diary", "\"Day 12. The crystal is said to lie beyond the old door...\""), tileSize * 7, tileSize * 14);
+		spawn(new Pickaxe(), tileSize * 8, tileSize * 14);
+		spawn(new Sword(), tileSize * 7, tileSize * 16);
 	}
 	
 	public void setNpc() {

@@ -10,6 +10,7 @@ public class OldManNpc extends Npc {
 	public OldManNpc(GamePanel gp) {		
 		super(gp, "Old man", new Action[] { Action.Talk, Action.Examine }, false, "/npc/oldman");
 		this.speed = 1;
+		this.description = "An old man with a long white beard. He seems lost in thought.";
 	}
 	
 	@Override 
